@@ -6,12 +6,9 @@ class detalle extends CI_Controller {
             $this->load->model('productos');
             $this->load->helper('url');
             $productos = $this->productos->DetallesDe($producto);                      
-            $this->load->view('header');   
-           
-            $pagina['dato1']=$this->load->view('category', '',true);
-            $pagina['dato2']=$this->load->view('product-details', array('pro'=>$productos), true);
-            $this->load->view('mostrar', $pagina);             
-            $this->load->view('footer');
+            $cuerpo['d1']=$this->load->view('category', '',true);
+        $cuerpo['d2']=$this->load->view('product-details', array('pro'=> $productos), true);
+        $this->load->view('prueba', array('cuerpo'=>$cuerpo));
         
         }
         

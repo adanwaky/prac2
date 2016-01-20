@@ -7,27 +7,27 @@
 
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"> <?php echo anchor('fruteria', 'Frutería') ?></h4>
+                                    <h4 class="panel-title"> <?php echo anchor('Categoria/mostrar/1', 'Frutería') ?></h4>
                                 </div>
                             </div>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"><?php echo anchor('pescaderia', 'Pescadería') ?></h4>
+                                    <h4 class="panel-title"><?php echo anchor('Categoria/mostrar/3', 'Pescadería') ?></h4>
                                 </div>
                             </div>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"><?php echo anchor('carniceria', 'Carnicería') ?></h4>
+                                    <h4 class="panel-title"><?php echo anchor('Categoria/mostrar/2', 'Carnicería') ?></h4>
                                 </div>
                             </div>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"><?php echo anchor('drogueria', 'Droguería') ?></h4>
+                                    <h4 class="panel-title"><?php echo anchor('Categoria/mostrar/5', 'Droguería') ?></h4>
                                 </div>
                             </div>
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title"><?php echo anchor('bebidas', 'Bebidas') ?></h4>
+                                    <h4 class="panel-title"><?php echo anchor('Categoria/mostrar/4', 'Bebidas') ?></h4>
                                 </div>
                             </div>
 
