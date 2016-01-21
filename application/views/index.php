@@ -22,6 +22,7 @@
                 </div>
             <?php } ?>
         </div><!--features_items-->
+        
     </div><!--/category-tab-->
 </div>
 </div>

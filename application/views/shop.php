@@ -1,7 +1,9 @@
     <section>
+       
+        
                 <div class="col-sm-9 padding-right">
                     <div class="features_items"><!--features_items-->
-                        <h2 class="title text-center">PRODUCTOS DESTACADOS</h2>
+                        <h2 class="title text-center">PRODUCTOS</h2>
                         <?php foreach ($pro as $producto) {?> 
                         <div class="col-sm-4">
                             <div class="product-image-wrapper">
@@ -19,14 +21,17 @@
                             </div>
                         </div>
                         <?php }?>
-                        <ul class="pagination">
+                        
+                        <!--ul class="pagination">
                             <li class="active"><a href="">1</a></li>
                             <li><a href="">2</a></li>
                             <li><a href="">3</a></li>
                             <li><a href="">&raquo;</a></li>
-                        </ul>
-                    </div><!--features_items-->
+                        </ul-->
+                       
+                    </div><!--features_items--><?=$paginacion?>
                 </div>
+         
             </div>
         </div>
     </section>
