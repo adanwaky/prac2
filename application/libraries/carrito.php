@@ -10,6 +10,9 @@ class carrito {
     var $array_unidades_pro;
 
     public function __construct() {
+        $CI=  get_instance();
+        $CI->load->library('session');
+        
         $this->num_productos = 0;
     }
 
@@ -27,12 +30,17 @@ class carrito {
     }
     
     function resumen_carrito()
-    {       
-       return array('id_prod'=>  $this->array_id_prod, 
-            'nombre_pro'=>  $this->array_nombre_prod, 
-            'precio'=>  $this->array_precio_prod,
-            'imagen'=>  $this->array_img_prod,
-            'unidades'=>  $this->array_unidades_pro);
+    {    
+        $carro = [];
+        for ($i=0;$i<$this->num_productos;$i++)
+        {
+            $carro[$i]= array('id_prod'=>  $this->array_id_prod[$i],
+            'nombre_pro'=>  $this->array_nombre_prod[$i], 
+            'precio'=>  $this->array_precio_prod[$i],
+            'imagen'=>  $this->array_img_prod[$i],
+            'unidades'=>  $this->array_unidades_pro[$i]);            
+        }
+        return $carro;
     }
     
     function actualizar_carrito($cantidad, $linea)
