@@ -20,6 +20,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php print_r($carro);
+                        foreach($carro as $pro){
+                        ?>
                         <tr>
                             <td class="cart_product">
                                 <a href=""><img src="<?= base_url() . 'assets/' ?>images/cart/one.png" alt=""></a>
@@ -45,6 +48,7 @@
                                 <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
                             </td>
                         </tr>
+                        <?php }?>
                     </tbody>
                 </table>
             </div>

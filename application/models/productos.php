@@ -10,14 +10,14 @@ class productos extends CI_Model {
     public function ProductosDestacados()
     {
         $qr = $this->db->query('select * from producto '
-                . 'where se_muestra=1 '
+                . 'where destacado=1 '
                 . 'and (curdate()<=fec_fin and curdate()>=fec_ini) ;');        
         return $qr->result_array();
     }
     
     public function ProductosDe($categoria, $page, $per_page)
     {
-        $qr = $this->db->get_where('producto', array('Categoria_idCat'=>$categoria), $per_page,$page);
+        $qr = $this->db->get_where('producto', array('Categoria_idCat'=>$categoria, 'se_muestra'=>1), $per_page,$page);
         return $qr->result_array();
     }
     
@@ -29,7 +29,14 @@ class productos extends CI_Model {
     
     public function num_filas($categoria)
     {
-        return $this->db->get_where('producto', array('Categoria_idCat'=>$categoria))->num_rows();
+        return $this->db->get_where('producto', array('Categoria_idCat'=>$categoria, 'se_muestra'=>1))->num_rows();
+    }
+    
+    public function Categorias()
+    {
+        $qr = $this->db->query('select * from categoria '
+                . 'where se_muestra=1;');        
+        return $qr->result_array();
     }
     
 }

@@ -41,7 +41,7 @@
                             <div class="shop-menu pull-right">
                                 <ul class="nav navbar-nav">
                                     <li><a href="#"><i class="fa fa-user"></i> Cuenta</a></li>
-                                    <li><?php echo anchor('Carrito/index', '<i class="fa fa-shopping-cart"></i>Carrito')?></li>
+                                    <li><?php echo anchor('Cart/index', '<i class="fa fa-shopping-cart"></i>Carrito')?></li>
                                     <li><?php echo anchor('Login/index', '<i class="fa fa-lock"></i>Login')?></li>
                                 </ul>
                             </div>
@@ -67,7 +67,7 @@
                                     <li><a href="<?= base_url() ?>" class="active">Home</a></li>
                                     <li class="dropdown"><a href="#">Tienda<i class="fa fa-angle-down"></i></a>
                                         <ul role="menu" class="sub-menu">
-                                            <li><?php echo anchor('Carrito/index', 'Carrito')?></li>
+                                            <li><?php echo anchor('Cart/index', 'Carrito')?></li>
                                             <li><?php echo anchor('Login/index', 'Login')?></li>
                                         </ul>
                                     </li>

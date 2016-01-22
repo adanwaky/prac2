@@ -3,13 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/prac2/application/controllers/Login.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/controllers/Categoria.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/views/shop.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/models/Productos.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/controllers/Welcome.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/views/category.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/controllers/Detalle.php</file>
+            <file>file:/C:/xampp/htdocs/prac2/application/libraries/carrito.php</file>
+            <file>file:/C:/xampp/htdocs/prac2/application/controllers/Cart.php</file>
+            <file>file:/C:/xampp/htdocs/prac2/application/views/cart.php</file>
         </group>
     </open-files>
 </project-private>

@@ -39,8 +39,9 @@ class Categoria extends CI_Controller {
         $this->pagination->initialize($config);
         $productos = array('pro' => $this->Productos->ProductosDe($categoria, $page, $config['per_page']),
             'paginacion' => $this->pagination->create_links());
-
-        $cuerpo['d1'] = $this->load->view('category', '', true);
+        
+        $categorias = $this->Productos->Categorias();
+        $cuerpo['d1'] = $this->load->view('category', array('cat'=>$categorias), true);
         $cuerpo['d2'] = $this->load->view('shop', $productos, true);
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
