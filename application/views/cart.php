@@ -20,7 +20,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $subtotal=0; $total=0;
+                        <?php $subtotal=0; $total=0; print_r($carro);
                         foreach($carro as $pro){
                         ?>
                         <tr>

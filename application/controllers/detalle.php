@@ -18,16 +18,19 @@ class Detalle extends CI_Controller {
         else
         {
         $cuerpo=[];
-        $carrito=$this->carrito->introduce_pro($this->input->post('id'), $this->input->post('nombre'), 
-                $this->input->post('precio'), $this->input->post('img'), $this->input->post('cant'));  
+        $carrito= array('id' =>$this->input->post('id'),
+            'nombre' =>$this->input->post('nombre'), 
+            'precio' =>$this->input->post('precio'),
+            'img' =>  $this->input->post('img'),
+            'unidades'=>$this->input->post('cant'));
         
-        $carro=$this->session->all_userdata();
-        print_r($carro);
-
+        $this->carrito->introduce_pro($carrito);
+        $carro=$_SESSION['carrito'];
+      
         //$carro=$this->carrito->resumen_carrito();
         
-      /*  $cuerpo['d1']=$this->load->view('cart',array('carro'=>$carro), true);
-        $this->load->view('plantilla', array('cuerpo'=>$cuerpo));*/
+        $cuerpo['d1']=$this->load->view('cart',array('carro'=>$carro), true);
+        $this->load->view('plantilla', array('cuerpo'=>$cuerpo));
         }
     }
 

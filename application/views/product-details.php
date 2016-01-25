@@ -11,7 +11,6 @@
                     </div>
                     <div class="col-sm-7">
                         <div class="miproducto-information"><!--/product-information-->
-                            
                             <img src="<?= base_url() . 'assets/' ?>images/product-details/new.jpg" class="newarrival" alt="" />
                             <h2 class=""><?= $pro[0]['nombrePro'] ?></h2>
                             <p class="">Web ID: <?= $pro[0]['idPro'] ?></p>
