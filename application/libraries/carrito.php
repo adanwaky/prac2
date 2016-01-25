@@ -10,9 +10,8 @@ class carrito {
     var $array_unidades_pro;
 
     public function __construct() {
-        $CI=  get_instance();
-        $CI->load->library('session');
-        
+        $CI=get_instance();
+        $CI->load->library('session');        
         $this->num_productos = 0;
     }
 

@@ -17,6 +17,7 @@
                             <p class="">Web ID: <?= $pro[0]['idPro'] ?></p>
                             <p> Descripción: <?= $pro[0]['descripcionPro'] ?></p><br>
                             <span><?= $pro[0]['precio'] ?> €</span>
+                            <?php if ($pro[0]['stock'] > 0){?>
                             <form method="post">
                                 <label>Cantidad:</label> 
                                 <input type="text" value="1" name="cant" size="2">
@@ -26,9 +27,9 @@
                                 <input type="hidden" name="id" value="<?=$pro[0]['idPro']?>">
                                 <input type="submit" name="add" 
                                        class="btn btn-fefault cart"  
-                                       value='Añadir al carrito'>
-                                
+                                       value='Añadir al carrito'>                                
                             </form>
+                            <?php }?>
                             <br>
                             <p><b>Disponibilidad:</b> 
                                 <?php echo ($pro[0]['stock'] > 0) ? "En Stock" : "No disponible" ?></p>

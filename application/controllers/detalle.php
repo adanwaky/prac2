@@ -19,11 +19,15 @@ class Detalle extends CI_Controller {
         {
         $cuerpo=[];
         $carrito=$this->carrito->introduce_pro($this->input->post('id'), $this->input->post('nombre'), 
-                $this->input->post('precio'), $this->input->post('img'), $this->input->post('cant'));        
-        $carro=$this->carrito->resumen_carrito();
+                $this->input->post('precio'), $this->input->post('img'), $this->input->post('cant'));  
         
-        $cuerpo['d1']=$this->load->view('cart',array('carro'=>$carro), true);
-        $this->load->view('plantilla', array('cuerpo'=>$cuerpo));
+        $carro=$this->session->all_userdata();
+        print_r($carro);
+
+        //$carro=$this->carrito->resumen_carrito();
+        
+      /*  $cuerpo['d1']=$this->load->view('cart',array('carro'=>$carro), true);
+        $this->load->view('plantilla', array('cuerpo'=>$cuerpo));*/
         }
     }
 
