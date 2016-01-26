@@ -31,7 +31,8 @@
                             <?php }?>
                             <br>
                             <p><b>Disponibilidad:</b> 
-                                <?php echo ($pro[0]['stock'] > 0) ? "En Stock" : "No disponible" ?></p>
+                                <?php echo ($pro[0]['stock'] > 0) ? "En Stock" : "No disponible" ?>
+                             <?php echo (@$pro[0]['pasado'] ==1) ? "<br>No hay esa cantidad disponible": ""?></p>
                         </div><!--/product-information-->
                     </div>
                 </div><!--/product-details-->

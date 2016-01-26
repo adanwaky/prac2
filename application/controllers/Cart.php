@@ -3,17 +3,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Cart extends CI_Controller {
     
-    public function addCart($proid, $pronom, $propre, $proimg, $procant)
+    public function muestraCart()
     {
-        $this->load->helper('url');     
-        $this->load->library('carrito');
-        
-        $carrito=new Carrito();
-        $carrito->introduce_pro($proid, $pronom, $propre, $proimg, $procant);        
-        $carro=$prueba->resumen_carrito();      
-        
-        $cuerpo['d1']=$this->load->view('cart',array('carro'=>$carro), true);
-        $this->load->view('plantilla', array('cuerpo'=>$cuerpo));
+        $carro = $_SESSION['carrito'];
+        $cuerpo['d1'] = $this->load->view('cart', array('carro' => $carro), true);
+        $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
     
+    public function mas($id)
+    {
+        $unique_id = md5($articulo["id"]);
+        $_SESSION['carrito'][$unique_id]['unidades']++;
+        //actualizar carrito
+    }
+    
+    public function menos($id)
+    {
+        $unique_id = md5($articulo["id"]);
+        $_SESSION['carrito'][$unique_id]['unidades']--;
+        //actualizar carrito
+    }
 }

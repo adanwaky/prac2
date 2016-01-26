@@ -7,10 +7,12 @@ class carrito {
     protected $carrito = array();
 
     public function __construct() {
-
-        if (!isset($_SESSION[carrito::CARRITO_ID])) {
+        if (session_status() == PHP_SESSION_NONE) {
             $CI = get_instance();
             $CI->load->library('session');
+        }
+
+        if (!isset($_SESSION[carrito::CARRITO_ID])) {
             $_SESSION[carrito::CARRITO_ID] = null;
             // $this->carrito["precio_total"] = 0;
             // $this->carrito["articulos_total"] = 0;
@@ -18,7 +20,7 @@ class carrito {
         $this->carrito = $_SESSION[carrito::CARRITO_ID];
     }
 
-    function introduce_pro($articulo) {//($id_pro, $nombre_pro, $precio, $img, $cantidad) {
+    function introduce_pro($articulo) {
         if (!is_array($articulo) || empty($articulo)) {
             throw new Exception("Error, el articulo no es un array!", 1);
         }
@@ -49,31 +51,35 @@ class carrito {
     }
 
     private function unset_producto($unique_id) {
-        unset($_SESSION["carrito"][$unique_id]);
+        unset($_SESSION[carrito::CARRITO_ID][$unique_id]);
     }
 
     public function update_carrito() {
         self::__construct();
     }
 
-    function elimina_pro($linea) {
-        $this->array_id_prod[$linea] = 0;
-    }
-
-    function resumen_carrito() {
-        $carro = [];
-        for ($i = 0; $i < $this->num_productos; $i++) {
-            $carro[$i] = array('id_prod' => $this->array_id_prod[$i],
-                'nombre_pro' => $this->array_nombre_prod[$i],
-                'precio' => $this->array_precio_prod[$i],
-                'imagen' => $this->array_img_prod[$i],
-                'unidades' => $this->array_unidades_pro[$i]);
+    public function remove_producto($unique_id) {
+        if ($this->carrito === null) {
+            throw new Exception("El carrito no existe!", 1);
         }
-        return $carro;
+
+        //si no existe la id única del producto en el carrito
+        if (!isset($this->carrito[$unique_id])) {
+            throw new Exception("La unique_id $unique_id no existe!", 1);
+        }
+
+        //en otro caso, eliminamos el producto, actualizamos el carrito y 
+        //el precio y cantidad totales del carrito
+        unset($_SESSION["carrito"][$unique_id]);
+        $this->update_carrito();
+        return true;
     }
 
-    function actualizar_carrito($cantidad, $linea) {
-        $this->array_unidades_prod[$linea] = $cantidad;
+    //eliminamos el contenido del carrito por completo
+    public function destroy() {
+        unset($_SESSION["carrito"]);
+        $this->carrito = null;
+        return true;
     }
 
 }
