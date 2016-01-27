@@ -14,8 +14,8 @@ class carrito {
 
         if (!isset($_SESSION[carrito::CARRITO_ID])) {
             $_SESSION[carrito::CARRITO_ID] = null;
-            // $this->carrito["precio_total"] = 0;
-            // $this->carrito["articulos_total"] = 0;
+            $this->carrito["precio_total"] = 0;
+            $this->carrito["articulos_total"] = 0;
         }
         $this->carrito = $_SESSION[carrito::CARRITO_ID];
     }
@@ -44,10 +44,55 @@ class carrito {
                 }
             }
         }
+        $articulo["cantidad"] = trim(preg_replace('/([^0-9\.])/i', '', $articulo["cantidad"]));
+        $articulo["precio"] = trim(preg_replace('/([^0-9\.])/i', '', $articulo["precio"]));
 
+        $articulo["total"] = $articulo["cantidad"] * $articulo["precio"];
         $this->unset_producto($unique_id);
         $_SESSION[carrito::CARRITO_ID][$unique_id] = $articulo;
         $this->update_carrito();
+        $this->update_precio_cantidad();
+    }
+
+    private function update_precio_cantidad() {
+
+        $precio = 0;
+        $articulos = 0;
+
+        foreach ($this->carrito as $row) {
+            $precio += ($row['precio'] * $row['cantidad']);
+            $articulos += $row['cantidad'];
+        }
+
+        $_SESSION[carrito::CARRITO_ID]["articulos_total"] = $articulos;
+        $_SESSION[carrito::CARRITO_ID]["precio_total"] = $precio;
+
+        $this->update_carrito();
+    }
+
+    public function precio_total() {
+        if (!isset($this->carrito["precio_total"]) || $this->carrito === null) {
+            return 0;
+        }
+
+        if (!is_numeric($this->carrito["precio_total"])) {
+            throw new Exception("El precio total del carrito debe ser un número", 1);
+        }
+
+        return $this->carrito["precio_total"] ? $this->carrito["precio_total"] : 0;
+    }
+
+    public function articulos_total() {
+
+        if (!isset($this->carrito["articulos_total"]) || $this->carrito === null) {
+            return 0;
+        }
+
+        if (!is_numeric($this->carrito["articulos_total"])) {
+            throw new Exception("El número de artículos del carrito debe ser un número", 1);
+        }
+
+        return $this->carrito["articulos_total"] ? $this->carrito["articulos_total"] : 0;
     }
 
     private function unset_producto($unique_id) {
@@ -80,6 +125,18 @@ class carrito {
         unset($_SESSION["carrito"]);
         $this->carrito = null;
         return true;
+    }
+
+    public function get_content() {
+        //asignamos el carrito a una variable
+        $carrito = $this->carrito;
+        //debemos eliminar del carrito el número de artículos
+        //y el precio total para poder mostrar bien los artículos
+        //ya que estos datos los devuelven los métodos 
+        //articulos_total y precio_total
+        unset($carrito["articulos_total"]);
+        unset($carrito["precio_total"]);
+        return $carrito == null ? null : $carrito;
     }
 
 }

@@ -5,7 +5,7 @@
             <url>application/controllers/detalle.php</url>
             <bookmark id="1">
                 <name/>
-                <line>22</line>
+                <line>21</line>
                 <key/>
             </bookmark>
         </file>
@@ -14,9 +14,8 @@
         <group>
             <file>file:/C:/xampp/htdocs/prac2/application/controllers/detalle.php</file>
             <file>file:/C:/xampp/htdocs/prac2/application/libraries/carrito.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/controllers/Cart.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/views/plantilla.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/views/cart.php</file>
+            <file>file:/C:/xampp/htdocs/prac2/application/views/index.php</file>
+            <file>file:/C:/xampp/htdocs/prac2/application/models/productos.php</file>
             <file>file:/C:/xampp/htdocs/prac2/application/views/product-details.php</file>
         </group>
     </open-files>

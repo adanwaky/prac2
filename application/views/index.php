@@ -12,7 +12,8 @@
                                 
                                 <h2><?= $producto['precio'] ?> €</h2>
                                 <p><?= $producto['nombrePro'] ?></p>
-                                
+                                <a href="#" class="btn btn-default add-to-cart">
+                                    <i class="fa fa-shopping-cart"></i>Añadir al carrito</a>
                             </div>
                             
                         </div>

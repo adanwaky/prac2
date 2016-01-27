@@ -2,33 +2,32 @@
 
 class Detalle extends CI_Controller {
 
-    public function index($producto) {
+    public function index($id) {
 
         $this->load->model('Productos');
         $this->load->helper('url');
         $this->load->library('carrito');
 
-        $productos = $this->Productos->DetallesDe($producto);
+        $producto = $this->Productos->DetallesDe($id);
         if (@!$_POST['add']) {
-            $this->mostrarDetalle($producto, $productos);
+            $this->mostrarDetalle($id, $producto);
         } else {
-            if ($this->input->post('cant') < 0 || $this->input->post('cant') > $productos[0]['stock']) {
+            if ($this->input->post('cant') < 0 || $this->input->post('cant') > $producto[0]['stock']) {
                 $productos[0]['pasado'] = 1;
-                $this->mostrarDetalle($producto, $productos);
+                $this->mostrarDetalle($id, $producto);
             } else {
-
-                $this->guardar();
+              //  $this->guardar($id, $producto);
                 $this->mostrarCarrito();
-                //  $this->session->unset_userdata('carrito');
+                  $this->session->unset_userdata('carrito');
             }
         }
     }
 
-    public function mostrarDetalle($producto, $productos) {
+    public function mostrarDetalle($id, $producto) {
 
         $categorias = $this->Productos->Categorias();
         $cuerpo['d1'] = $this->load->view('category', array('cat' => $categorias), true);
-        $cuerpo['d2'] = $this->load->view('product-details', array('pro' => $productos), true);
+        $cuerpo['d2'] = $this->load->view('product-details', array('pro' => $producto), true);
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
 
@@ -40,11 +39,11 @@ class Detalle extends CI_Controller {
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
 
-    public function guardar() {
-        $carrito = array('id' => $this->input->post('id'),
-            'nombre' => $this->input->post('nombre'),
-            'precio' => $this->input->post('precio'),
-            'img' => $this->input->post('img'),
+    public function guardar($id, $producto) {
+        $carrito = array('id' => $id,
+            'nombre' => $producto['0']['nombrePro'],
+            'precio' => $producto['0']['precio'],
+            'img' => $producto['0']['imagen'],
             'unidades' => $this->input->post('cant'));
         $this->carrito->introduce_pro($carrito);
     }
