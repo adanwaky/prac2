@@ -41,7 +41,7 @@
                             <div class="shop-menu pull-right">
                                 <ul class="nav navbar-nav">
                                     <li><a href="#"><i class="fa fa-user"></i> Cuenta</a></li>
-                                    <li><?php echo anchor('Detalle/mostrarCarrito', '<i class="fa fa-shopping-cart"></i>Carrito')?></li>
+                                    <li><?php echo anchor('Cart/muestraCart', '<i class="fa fa-shopping-cart"></i>Carrito')?></li>
                                     <li><?php echo anchor('Login/index', '<i class="fa fa-lock"></i>Login')?></li>
                                 </ul>
                             </div>

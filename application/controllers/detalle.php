@@ -16,9 +16,8 @@ class Detalle extends CI_Controller {
                 $productos[0]['pasado'] = 1;
                 $this->mostrarDetalle($id, $producto);
             } else {
-              //  $this->guardar($id, $producto);
-                $this->mostrarCarrito();
-                  $this->session->unset_userdata('carrito');
+                $this->guardar($id, $producto);
+                //  $this->session->unset_userdata('carrito');
             }
         }
     }
@@ -31,14 +30,6 @@ class Detalle extends CI_Controller {
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
 
-    public function mostrarCarrito() {
-
-        $carro = $_SESSION['carrito'];
-        $cuerpo = [];
-        $cuerpo['d1'] = $this->load->view('cart', array('carro' => $carro), true);
-        $this->load->view('plantilla', array('cuerpo' => $cuerpo));
-    }
-
     public function guardar($id, $producto) {
         $carrito = array('id' => $id,
             'nombre' => $producto['0']['nombrePro'],
@@ -46,6 +37,7 @@ class Detalle extends CI_Controller {
             'img' => $producto['0']['imagen'],
             'unidades' => $this->input->post('cant'));
         $this->carrito->introduce_pro($carrito);
+        redirect('/Cart/muestraCart', 'location', 301);
     }
 
 }

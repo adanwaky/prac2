@@ -44,10 +44,10 @@ class carrito {
                 }
             }
         }
-        $articulo["cantidad"] = trim(preg_replace('/([^0-9\.])/i', '', $articulo["cantidad"]));
+        $articulo["unidades"] = trim(preg_replace('/([^0-9\.])/i', '', $articulo["unidades"]));
         $articulo["precio"] = trim(preg_replace('/([^0-9\.])/i', '', $articulo["precio"]));
 
-        $articulo["total"] = $articulo["cantidad"] * $articulo["precio"];
+        $articulo["total"] = $articulo["unidades"] * $articulo["precio"];
         $this->unset_producto($unique_id);
         $_SESSION[carrito::CARRITO_ID][$unique_id] = $articulo;
         $this->update_carrito();
@@ -60,8 +60,8 @@ class carrito {
         $articulos = 0;
 
         foreach ($this->carrito as $row) {
-            $precio += ($row['precio'] * $row['cantidad']);
-            $articulos += $row['cantidad'];
+            $precio += ($row['precio'] * $row['unidades']);
+            $articulos += $row['unidades'];
         }
 
         $_SESSION[carrito::CARRITO_ID]["articulos_total"] = $articulos;
@@ -107,7 +107,6 @@ class carrito {
         if ($this->carrito === null) {
             throw new Exception("El carrito no existe!", 1);
         }
-
         //si no existe la id única del producto en el carrito
         if (!isset($this->carrito[$unique_id])) {
             throw new Exception("La unique_id $unique_id no existe!", 1);
@@ -115,14 +114,15 @@ class carrito {
 
         //en otro caso, eliminamos el producto, actualizamos el carrito y 
         //el precio y cantidad totales del carrito
-        unset($_SESSION["carrito"][$unique_id]);
+        unset($_SESSION[carrito::CARRITO_ID][$unique_id]);
         $this->update_carrito();
+        $this->update_precio_cantidad();
         return true;
     }
 
     //eliminamos el contenido del carrito por completo
     public function destroy() {
-        unset($_SESSION["carrito"]);
+        unset($_SESSION[carrito::CARRITO_ID]);
         $this->carrito = null;
         return true;
     }
