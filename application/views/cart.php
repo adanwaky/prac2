@@ -1,4 +1,5 @@
-<body>
+
+     <form method="post">
     <section id="cart_items">
         <div class="container">
             <div class="breadcrumbs">
@@ -20,16 +21,13 @@
                         </tr>
                     </thead>
                     <tbody>
+                       
                         <?php
-                        $subtotal = 0;
-                        $total = 0;
                         if ($carro == null) {?>
                     <div> No hay productos en el carrito</div>
                             <?php
                         } else {
-                           
                             foreach ($carro as $pro) {
-                                
                                 ?>
                                 <tr>
                                     <td class="cart_product">
@@ -44,9 +42,7 @@
                                     </td>
                                     <td class="cart_quantity">
                                         <div class="cart_quantity_button">
-                                           
-                                            <input type="number" id="cant<?=$pro['id']?>" value="<?= $pro['unidades'] ?>" min="1">
-                                           
+                                            <input type="number" name="<?=$pro['id']?>" value="<?= $pro['unidades'] ?>" min="1">
                                         </div>
                                     </td>
                                     <td class="cart_total">
@@ -81,10 +77,14 @@
                             <li>IVA <span>21%</span></li>
                             <li>Total <span><?= round($euros * 1.21, 2) ?>€</span></li>
                         </ul>
-                        <a class="btn btn-default update" href="">Actualizar</a>
+                        <input type="submit" name="upd" 
+                                           class="btn btn-fefault cart"  
+                                           value='Actualizar'>     
                         <a class="btn btn-default check_out" href="">Continuar</a>
                     </div>
+                   
                 </div>
             </div>
         </div>
-    </section><!--/#do_action-->
+    </section>
+     </form><!--/#do_action-->

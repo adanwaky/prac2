@@ -37,13 +37,13 @@ class carrito {
 
         $articulo["unique_id"] = $unique_id;
 
-        if (!empty($this->carrito)) {
+        /*if (!empty($this->carrito)) {
             foreach ($this->carrito as $row) {
                 if ($row["unique_id"] === $unique_id) {
-                    $articulo["unidades"] = $row["unidades"] + $articulo["unidades"];
+                    $articulo["unidades"] = $row["unidades"];
                 }
             }
-        }
+        }*/
         $articulo["unidades"] = trim(preg_replace('/([^0-9\.])/i', '', $articulo["unidades"]));
         $articulo["precio"] = trim(preg_replace('/([^0-9\.])/i', '', $articulo["precio"]));
 

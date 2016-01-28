@@ -17,11 +17,14 @@ class Cart extends CI_Controller {
         }
         else
         {
-            
+            foreach ($_POST as $key => $value) {
+                 $this->guardar($key, $value);
+            }
+           
         }
     }
        
-    public function guardar($id){
+    public function guardar($id, $unidades=1){
         $this->load->model('productos');
          $this->load->library('carrito'); 
          $this->load->helper('url');
@@ -30,7 +33,7 @@ class Cart extends CI_Controller {
             'nombre' => $producto['0']['nombrePro'],
             'precio' => $producto['0']['precio'],
             'img' => $producto['0']['imagen'],
-            'unidades' => 1);       
+            'unidades' => $unidades);       
         $this->carrito->introduce_pro($prod);
        redirect('/Cart/muestraCart', 'location',301); 
     }
