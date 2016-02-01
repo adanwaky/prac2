@@ -13,7 +13,7 @@ class Detalle extends CI_Controller {
             $this->mostrarDetalle($id, $producto);
         } else {
             if ($this->input->post('cant') < 0 || $this->input->post('cant') > $producto[0]['stock']) {
-                $productos[0]['pasado'] = 1;
+                $producto[0]['pasado'] = 1;
                 $this->mostrarDetalle($id, $producto);
             } else {
                 $this->guardar($id, $producto);
