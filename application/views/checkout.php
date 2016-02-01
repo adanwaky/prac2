@@ -25,7 +25,7 @@
                             echo ($datos[0]['cp'] . ', ' . $provincia[0]['nombre'].'<br>');
                             ?>
                             <form>             
-                                <a class="btn btn-primary" href="Login/datosUser/<?=$_SESSION['user']?>">Cambiar Datos</a>
+                                <a class="btn btn-primary" href="<?=base_url().'index.php/Login/datosUser'?>">Cambiar Datos</a>
                             </form>
                                                  
                     </div>

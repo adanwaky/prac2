@@ -85,7 +85,7 @@ class Cart extends CI_Controller {
         redirect('/Cart/muestraCart', 'location', 301);
     }
 
-    public function realizarcompra($usuario) {
+    public function realizarcompra() {
         $this->load->helper('url');
         $this->load->library('session');
         $this->load->model('usuarios');
@@ -93,7 +93,7 @@ class Cart extends CI_Controller {
         $this->load->library('carrito');
         
 
-        $datosUser = $this->usuarios->DevuelveDatosUs($usuario);
+        $datosUser = $this->usuarios->DevuelveDatosUs($_SESSION['user']);
         $provincia = $this->provincias->DevuelveProvincia($datosUser[0]['provincias_id']);
         $euros = $this->carrito->precio_total();
         $carro = $this->carrito->get_content();

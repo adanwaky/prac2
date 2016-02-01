@@ -5,6 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Login extends CI_Controller {
 
     public function index() {
+
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->helper('form');
@@ -24,12 +25,12 @@ class Login extends CI_Controller {
                 $this->load->view('plantilla', array('cuerpo' => $cuerpo));
             }
         }
-
         if ($this->input->post('insc')) {
-//No repetir nombres de usuarios
+//No repetir nombres de usuarios 
             $this->Inscribir($this->input->post('DNI'), $this->input->post('us'), md5($this->input->post('ps')), $this->input->post('mail'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'));
+            $_SESSION['login'] = 'logueado';
             if (isset($_SESSION['comprando'])) {
-//IR A RESUMEN
+                redirect('/Cart/realizarcompra', 'location', 301);
             } else {
                 redirect('/Welcome/index', 'location', 301);
             }
@@ -51,7 +52,7 @@ class Login extends CI_Controller {
             $_SESSION['login'] = 'logueado';
             $_SESSION['user'] = $this->input->post('user');
             if (isset($_SESSION['comprando'])) {
-//IR A RESUMEN
+                redirect('/Cart/realizarcompra', 'location', 301);
             } else {
                 redirect('/Welcome/index', 'location', 301);
             }
@@ -72,20 +73,19 @@ class Login extends CI_Controller {
         $this->usuarios->InsertarUsuario($datos);
     }
 
-    public function datosUser($nameuser) {
-         $this->load->helper('url');
-         $this->load->library('session');
+    public function datosUser() {
+        $this->load->helper('url');
+        $this->load->library('session');
         $this->load->helper('form');
         $this->load->model('usuarios');
         $this->load->model('provincias');
-        $provincias=  $this->provincias->arrayprovincias();
-        $user=  $this->usuarios->DevuelveDatosUs($nameuser);
-        $cuerpo['d1'] = $this->load->view('form_usuario', array( 'user'=>$user, 'provincias'=>$provincias), true);
-            $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+        $provincias = $this->provincias->arrayprovincias();
+        $user = $this->usuarios->DevuelveDatosUs($_SESSION['user']);
+        $cuerpo['d1'] = $this->load->view('form_usuario', array('user' => $user, 'provincias' => $provincias), true);
+        $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
-    
-   
-    public function ActualizarUser($dni, $us, $ps, $mail, $nombre, $apellidos, $dir, $cp, $provincia){
+
+    public function ActualizarUser($dni, $us, $ps, $mail, $nombre, $apellidos, $dir, $cp, $provincia) {
         $datos = array('dni' => $dni,
             'user' => $us,
             'pass' => $ps,

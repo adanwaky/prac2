@@ -17,6 +17,7 @@
                                style="background-color:#FF8A02;color:white;"  
                                value='Entrar'> 
                     </form>
+                     <?php echo anchor("Login/ResetPass", "¿Ha olvidado su contraseña?") ?>
                 </div><!--/login form-->
             </div>
             <div class="col-sm-1">

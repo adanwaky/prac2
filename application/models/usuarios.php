@@ -28,7 +28,11 @@ class usuarios extends CI_Model {
     }
     
     public function ActualizarUsuario($data){
-       $this->db->update('mi_tabla', $data, array('user' => $data['user']));
+       $this->db->update('usuario', $data, array('user' => $data['user']));
+    }
+    
+    public function BajaUsuario($user){
+        $this->db->update('usuario', array('estado'=>'baja'), "user = $user");
     }
 
 }

@@ -8,10 +8,12 @@
                     <form action="#">
                         <label>Nombre de usuario: </label> 
                         <input type="text" name="us" value="<?= $user[0]['user'] ?>"/>
+                        <input type="submit" name="cons" 
+                               style="background-color:#FF8A02;color:white;"  
+                               value='¿Cambiar contraseña?'> 
                         <label>Correo electrónico: </label>
                         <input type="email" name="mail" value="<?= $user[0]['mail'] ?>"/>
-                        <label>Contraseña: </label>
-                        <input type="password" name="ps" value="<?= $user[0]['pass'] ?>"/>  
+                         
                         <label>DNI: </label>
                         <input type="text" name="DNI" value="<?= $user[0]['dni'] ?>"/>
                         <label>Nombre: </label>
@@ -22,12 +24,12 @@
                         <input type="text" name="dir" value="<?= $user[0]['direccion'] ?>"/>
                         <label>Código Postal: </label>
                         <input type="text" name="cp" value="<?= $user[0]['cp'] ?>"/>     
-                        <label>Provincias: </label>
+                        <label>Provincia: </label>
                         <?php echo form_dropdown('provincias_id', $provincias, $user[0]['provincias_id']) ?>    
                         <br><br>
                         <input type="submit" name="act" 
                                style="background-color:#FF8A02;color:white;"  
-                               value='Actualizar Datos'> 
+                               value='Guardar Datos'> 
                         <input type="submit" name="baja" 
                                style="background-color:#FF8A02;color:white;"  
                                value='Darme de baja'> 
