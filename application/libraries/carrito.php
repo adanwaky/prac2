@@ -20,7 +20,8 @@ class carrito {
         $this->carrito = $_SESSION[carrito::CARRITO_ID];
     }
 
-    function introduce_pro($articulo) {
+    function introduce_pro($articulo, $stock) {
+
         if (!is_array($articulo) || empty($articulo)) {
             throw new Exception("Error, el articulo no es un array!", 1);
         }
@@ -37,16 +38,8 @@ class carrito {
 
         $articulo["unique_id"] = $unique_id;
 
-        /*if (!empty($this->carrito)) {
-            foreach ($this->carrito as $row) {
-                if ($row["unique_id"] === $unique_id) {
-                    $articulo["unidades"] = $row["unidades"];
-                }
-            }
-        }*/
         $articulo["unidades"] = trim(preg_replace('/([^0-9\.])/i', '', $articulo["unidades"]));
         $articulo["precio"] = trim(preg_replace('/([^0-9\.])/i', '', $articulo["precio"]));
-
         $articulo["total"] = $articulo["unidades"] * $articulo["precio"];
         $this->unset_producto($unique_id);
         $_SESSION[carrito::CARRITO_ID][$unique_id] = $articulo;

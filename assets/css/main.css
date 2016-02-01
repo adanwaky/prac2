@@ -286,6 +286,7 @@ a#scrollUp i{
   animation: fadeInUp 400ms;
 }
 
+
 ul.sub-menu {
 	position: absolute;
 	top: 30px;
@@ -294,7 +295,7 @@ ul.sub-menu {
 	list-style: none;
 	padding: 0;
 	margin: 0;
-	width: 220px;
+	width: 150px;
 	-webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 	display: none;
@@ -316,7 +317,7 @@ ul.sub-menu {
 }
 
 .navbar-nav li ul.sub-menu li a{
-  color: #fff;
+  color: #FFC608;
 }
 
 .navbar-nav li ul.sub-menu li a:hover{

@@ -15,4 +15,9 @@ class provincias extends CI_Model {
         }
         return $provincias;
     }
+    
+    public function devuelveProvincia($id){
+        $qr = $this->db->query("select nombre from provincia where idPro='$id'");        
+        return $qr->result_array();
+    }
 }

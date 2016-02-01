@@ -7,6 +7,7 @@ class Welcome extends CI_Controller {
 	{    $this->load->library('pagination');
         $this->load->model('Productos');
             $this->load->helper('url');
+            $this->load->library('session');
             
             $categorias = $this->Productos->Categorias();
             $productos = $this->Productos->ProductosDestacados();

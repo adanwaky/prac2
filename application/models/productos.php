@@ -11,7 +11,7 @@ class productos extends CI_Model {
     {
         $qr = $this->db->query('select * from producto '
                 . 'where destacado=1 '
-                . 'and (curdate()<=fec_fin and curdate()>=fec_ini) ;');        
+                . 'and (curdate()<=fec_fin and curdate()>=fec_ini);');        
         return $qr->result_array();
     }
     

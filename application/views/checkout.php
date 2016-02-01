@@ -16,23 +16,18 @@
             <div class="shopper-informations">
                 <div class="row">
                     <!--div class="col-sm-5 clearfix"-->
-                    <div class="bill-to">
-                        <p>Facturar a</p>
-                        <div class="form-one">
+                    <div class="shopper-info">
+                        <p>Enviar a:</p>
+                       
+                            <?php
+                            echo ($datos[0]['nombreUs'] . ' ' . $datos[0]['apellidos'].'<br>');
+                            echo ($datos[0]['direccion'].'<br>');
+                            echo ($datos[0]['cp'] . ', ' . $provincia[0]['nombre'].'<br>');
+                            ?>
                             <form>             
-
-                                <input type="text" placeholder="Usuario">
-                                <input type="text" placeholder="Email">
-                                <input type="text" placeholder="DNI">
-                                <input type="text" placeholder="Nombre">
-
-                                <input type="text" placeholder="Apellidos">
-                                <input type="text" placeholder="Dirección">
-                                <input type="text" placeholder="Código Postal">
-                                <?php echo form_dropdown('provincias_id', $provincias) ?> 
-
+                                <a class="btn btn-primary" href="Login/datosUser/<?=$_SESSION['user']?>">Cambiar Datos</a>
                             </form>
-                        </div>                           
+                                                 
                     </div>
 
                     <!--/div-->
@@ -54,59 +49,50 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="cart_product">
-                                    <a href=""><img src="<?= base_url() . 'assets/' ?>images/cart/one.png" alt=""></a>
-                                </td>
-                                <td class="cart_description">
-                                    <h4><a href="">Colorblock Scuba</a></h4>
-                                    <p>Web ID: 1089772</p>
-                                </td>
-                                <td class="cart_price">
-                                    <p>$59</p>
-                                </td>
-                                <td class="cart_quantity">
-                                    <div class="cart_quantity_button">
-                                        <a class="cart_quantity_up" href=""> + </a>
-                                        <input class="cart_quantity_input" type="text" name="quantity" value="1" autocomplete="off" size="2">
-                                        <a class="cart_quantity_down" href=""> - </a>
-                                    </div>
-                                </td>
-                                <td class="cart_total">
-                                    <p class="cart_total_price">$59</p>
-                                </td>
-                                <td class="cart_delete">
-                                    <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4">&nbsp;</td>
-                                <td colspan="2">
-                                    <table class="table table-condensed total-result">
-                                        <tr>
-                                            <td>Subtotal</td>
-                                            <td>$59</td>
-                                        </tr>
-                                        <tr>
-                                            <td>IVA</td>
-                                            <td>$2</td>
-                                        </tr>
-                                        <tr class="shipping-cost">
-                                            <td>Gastos de envío</td>
-                                            <td>Gratis</td>										
-                                        </tr>
-                                        <tr>
-                                            <td>Total</td>
-                                            <td><span>$61</span></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
+
+                            <?php if ($carro == null) { ?>
+                            <div> No hay productos en el carrito</div>
+                            <?php
+                        } else {
+
+                            foreach ($carro as $pro) {
+                                ?>
+                                <tr>
+                                    <td class="cart_product">
+                                        <a href=""><img src="<?= base_url() . 'assets/img/' . $pro['img'] ?>" alt=""></a>
+                                    </td>
+                                    <td class="cart_description">
+                                        <h4><a href=""><?= $pro['nombre'] ?></a></h4>
+                                        <p>Web ID: <?= $pro['id'] ?></p>
+                                    </td>
+                                    <td class="cart_price">
+                                        <p><?= $pro['precio'] ?>€</p>
+                                    </td>
+                                    <td class="cart_quantity">
+                                        <div class="cart_quantity_button">
+                                            <input type="number" name="<?= $pro['id'] ?>" value="<?= $pro['unidades'] ?>" readonly min="1">
+                                        </div>
+                                    </td>
+                                    <td class="cart_total">
+                                        <p class="cart_total_price">
+                                            <?=
+                                            $pro['total']
+                                            ?>€
+                                        </p>
+                                    </td>
+                                    <td class="cart_delete">
+                                        <a class="cart_quantity_delete" href="<?= base_url() . 'index.php/Cart/borrar/' . $pro['id'] ?>"><i class="fa fa-times"></i></a>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
                         </tbody>
-                    </table>                    
+                    </table>
                 </div>
                 <div align="right">
-                <a class="btn btn-default check_out" href="">Realizar Pedido</a>
+                    <a class="btn btn-default check_out" href="">Realizar Pedido</a>
                 </div>
                 <br><br>
             </div>
