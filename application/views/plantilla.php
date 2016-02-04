@@ -46,7 +46,7 @@
                                         <a href="#"><i class="fa fa-user"></i> Cuenta<i class="fa fa-angle-down"></i></a>
                                         <ul role="menu" class="sub-menu">
                                             <li><?php echo anchor("Login/datosUser", "Datos") ?></li>
-                                            <li><?php echo anchor('Login/index', 'Pedidos') ?></li>
+                                            <li><?php echo anchor('Correo/index', 'Pedidos') ?></li>
                                             <li><?php echo anchor('Login/CerrarSesion', 'Cerrar Sesión') ?></li>
                                         </ul></li><?php }
                                     ?>

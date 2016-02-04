@@ -39,4 +39,8 @@ class productos extends CI_Model {
         return $qr->result_array();
     }
     
+    public function DisminuyeStock($id, $data){
+         $this->db->update('producto', $data, array('idPro' => $id));
+    }
+    
 }

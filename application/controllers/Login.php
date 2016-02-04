@@ -102,8 +102,33 @@ class Login extends CI_Controller {
         $this->usuarios->ActualizarUsuario($datos);
     }
 
-    public function cambiarContraseña() {
-        
+    public function enviarCorreoPass($id) {
+        $this->load->model('usuarios');         
+        $us=$this->usuarios->DevuelveDatosUs($id);
+        $token= $this->generaToken($id, $us[0]['pass'], $us[0]['user']);
+        $url=  base_url()."";
+        $subject="Cambio de contraseña";
+        redirect("/Correo/index/".$us[0]['correo']."/$url/$subject", 'location', 301);
+    }
+    
+    private function generaToken($id, $dni, $user){
+        $token=  sha1($id . $dni . $user);
+        return $token;
+    }
+    
+    public function cambiarPass($id, $token){
+        if(!$_POST){
+        $cuerpo['d1'] = $this->load->view('camb_cont', '', true);
+        $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+        }else{
+        $this->load->model('usuarios');
+        $us=$this->usuarios->DevuelveDatosUs($id);
+        $tok= $this->generaToken($id, $us[0]['pass'], $_POST['user']);
+        $data=array('pass'=>$_POST['pass']);
+        if ($tok==$token){
+            $this->usuarios->ActualizarUsuario($data);
+        }
+        }
     }
 
 }
