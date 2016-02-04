@@ -41,7 +41,7 @@
                             <div class="shop-menu pull-right">
                                 <ul class="nav navbar-nav collapse navbar-collapse">
                                     <?php if (isset($_SESSION['user'])) { ?>
-                                        <li>Hola, <?php echo $_SESSION['user'] ?>!</li>
+                                        <li>Hola, <?php echo $_SESSION['nombreUser'] ?>!</li>
                                     <li class="dropdown">
                                         <a href="#"><i class="fa fa-user"></i> Cuenta<i class="fa fa-angle-down"></i></a>
                                         <ul role="menu" class="sub-menu">

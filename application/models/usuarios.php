@@ -22,8 +22,8 @@ class usuarios extends CI_Model {
         $this->db->insert('usuario', $data);
     }
     
-    public function DevuelveDatosUs($user){
-        $qr = $this->db->query("select * from usuario where user='$user'");        
+    public function DevuelveDatosUs($id){
+        $qr = $this->db->query("select * from usuario where idUsu='$id'");        
         return $qr->result_array();
     }
     
@@ -31,8 +31,13 @@ class usuarios extends CI_Model {
        $this->db->update('usuario', $data, array('user' => $data['user']));
     }
     
-    public function BajaUsuario($user){
-        $this->db->update('usuario', array('estado'=>'baja'), "user = $user");
+    public function BajaUsuario($id){
+        $this->db->update('usuario', array('estado'=>'baja'), "idUsu = $id");
+    }
+    
+    public function DevuelveId($user, $pass){
+        $qr = $this->db->query("select idUsu from usuario where user='$user' and pass='$pass'");        
+        return $qr->result_array();
     }
 
 }

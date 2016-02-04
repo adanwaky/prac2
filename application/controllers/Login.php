@@ -18,11 +18,13 @@ class Login extends CI_Controller {
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
             if ($this->input->post('login')) {
-                $this->LogeaUser($this->input->post('user'), md5($this->input->post('pass')));
-            } else {
-                $mensaje = 'Nombre de usuario o contraseña incorrecta';
-                $cuerpo['d1'] = $this->load->view('login', array('mensaje' => $mensaje, 'provincias' => $provincias), true);
-                $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+                if ($this->usuarios->existeUser($this->input->post('user'), md5($this->input->post('pass')))) {
+                    $this->LogeaUser($this->input->post('user'), md5($this->input->post('pass')));
+                } else {
+                    $mensaje = 'Nombre de usuario o contraseña incorrecta';
+                    $cuerpo['d1'] = $this->load->view('login', array('mensaje' => $mensaje, 'provincias' => $provincias), true);
+                    $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+                }
             }
         }
         if ($this->input->post('insc')) {
@@ -48,14 +50,15 @@ class Login extends CI_Controller {
     }
 
     public function LogeaUser($user, $pass) {
-        if ($this->usuarios->existeUser($user, $pass)) {
-            $_SESSION['login'] = 'logueado';
-            $_SESSION['user'] = $this->input->post('user');
-            if (isset($_SESSION['comprando'])) {
-                redirect('/Cart/realizarcompra', 'location', 301);
-            } else {
-                redirect('/Welcome/index', 'location', 301);
-            }
+
+        $_SESSION['login'] = 'logueado';
+        $id = $this->usuarios->DevuelveId($user, $pass);
+        $_SESSION['user'] = $id[0]['idUsu'];
+        $_SESSION['nombreUser']=$user;
+       if (isset($_SESSION['comprando'])) {
+            redirect('/Cart/realizarcompra', 'location', 301);
+        } else {
+            redirect('/Welcome/index', 'location', 301);
         }
     }
 
@@ -97,6 +100,10 @@ class Login extends CI_Controller {
             'estado' => 'alta',
             'provincias_id' => $provincia);
         $this->usuarios->ActualizarUsuario($datos);
+    }
+
+    public function cambiarContraseña() {
+        
     }
 
 }
