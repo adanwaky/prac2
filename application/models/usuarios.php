@@ -8,7 +8,7 @@ class usuarios extends CI_Model {
     }
 
     public function existeUser($user, $pass) {
-        $qr = $this->db->get_where('usuario', array('pass' => $pass, 'nombreUs' => $user))->num_rows();
+        $qr = $this->db->get_where('usuario', array('pass' => $pass, 'nombreUs' => $user, 'estado'=>'alta'))->num_rows();
         if ($qr == 1) {
             $_SESSION['login'] = "login";
             return true;
@@ -39,5 +39,12 @@ class usuarios extends CI_Model {
         $qr = $this->db->query("select idUsu from usuario where user='$user' and pass='$pass'");        
         return $qr->result_array();
     }
+    
+    public function DevuelveId2($user){
+        $qr = $this->db->query("select idUsu from usuario where user='$user'");        
+        return $qr->result_array();
+    }
+    
+    
 
 }

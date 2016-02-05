@@ -75,7 +75,7 @@
                 <div class="col-sm-6">
                     <div class="total_area">
                         <ul>
-                            <li>Subtotal <span><?= $euros ?>€</span></li>
+                            <li>Subtotal <span><?=$euros?>€</span></li>
                             <li>IVA <span>21%</span></li>
                             <li>Total <span><?= round($euros * 1.21, 2) ?>€</span></li>
                         </ul>

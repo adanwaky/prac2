@@ -18,16 +18,16 @@
                     <!--div class="col-sm-5 clearfix"-->
                     <div class="shopper-info">
                         <p>Enviar a:</p>
-                       
-                            <?php
-                            echo ($datos[0]['nombreUs'] . ' ' . $datos[0]['apellidos'].'<br>');
-                            echo ($datos[0]['direccion'].'<br>');
-                            echo ($datos[0]['cp'] . ', ' . $provincia[0]['nombre'].'<br>');
-                            ?>
-                            <form>             
-                                <a class="btn btn-primary" href="<?=base_url().'index.php/Login/datosUser'?>">Cambiar Datos</a>
-                            </form>
-                                                 
+
+                        <?php
+                        echo ($datos[0]['nombreUs'] . ' ' . $datos[0]['apellidos'] . '<br>');
+                        echo ($datos[0]['direccion'] . '<br>');
+                        echo ($datos[0]['cp'] . ', ' . $provincia[0]['nombre'] . '<br>');
+                        ?>
+                        <form>             
+                            <a class="btn btn-primary" href="<?= base_url() . 'index.php/Login/datosUser' ?>">Cambiar Datos</a>
+                        </form>
+
                     </div>
 
                     <!--/div-->
@@ -84,10 +84,27 @@
                                         <a class="cart_quantity_delete" href="<?= base_url() . 'index.php/Cart/borrar/' . $pro['id'] ?>"><i class="fa fa-times"></i></a>
                                     </td>
                                 </tr>
+
                                 <?php
                             }
                         }
                         ?>
+                        <tr>
+                            <td colspan="4">&nbsp;</td>
+                            <td colspan="2">
+                                <table class="table table-condensed total-result">
+                                    <tr>
+                                        <td>Subtotal</td>
+                                        <td><?= $euros ?>€</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td><?= round($euros * 1.21, 2) ?>€</td>
+                                    </tr>
+
+                                </table>
+                            </td>
+                        </tr>       
                         </tbody>
                     </table>
                 </div>

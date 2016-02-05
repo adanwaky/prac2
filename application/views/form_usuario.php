@@ -5,7 +5,7 @@
             <div class="col-sm-4">
                 <div class="signup-form" ><!--sign up form-->
                     <h2>Datos Usuario</h2>
-                    <form action="#">
+                    <form method="post">
                         <label>Nombre de usuario: </label> 
                         <input type="text" name="us" value="<?= $user[0]['user'] ?>"/>
                         <input type="submit" name="cons" 

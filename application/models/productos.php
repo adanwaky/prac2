@@ -43,4 +43,13 @@ class productos extends CI_Model {
          $this->db->update('producto', $data, array('idPro' => $id));
     }
     
+    public function num_filas_tot(){
+       return $this->db->get_where('producto')->num_rows();
+    }
+    public function TodosProductos($page, $per_page){
+        
+        $qr = $this->db->query('select * from producto '
+                . "where idPro>0 LIMIT $page, $per_page;");
+        return $qr->result_array(); 
+    }
 }

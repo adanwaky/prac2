@@ -11,24 +11,19 @@
                                     <div class="productinfo text-center">
                                        <?php echo anchor('detalle/index/'.$producto['idPro'],'  
                                 <img src= "'.base_url() . 'assets/img/' . $producto['imagen'].'"/>')?>
-                                        <!--img src="<?= base_url() . 'assets/img/'.$producto['imagen']?>" alt="" /-->
                                         <h2><?= $producto['precio'] ?> €</h2>
                                             <p><?= $producto['nombrePro'] ?></p>
-                                        
+                                        <?php if($producto['stock']>0){?>
+                                <a href="<?=base_url()?>index.php/Cart/guardar/<?=$producto['idPro']?>"
+                                   class="btn btn-default add-to-cart">
+                                    <i class="fa fa-shopping-cart"></i>Añadir al carrito</a>
+                                <?php }else {echo 'No disponible';}?>
                                     </div>
                                     
                                 </div>
                             </div>
                         </div>
                         <?php }?>
-                        
-                        <!--ul class="pagination">
-                            <li class="active"><a href="">1</a></li>
-                            <li><a href="">2</a></li>
-                            <li><a href="">3</a></li>
-                            <li><a href="">&raquo;</a></li>
-                        </ul-->
-                       
                     </div><!--features_items--><?=$paginacion?>
                 </div>
          

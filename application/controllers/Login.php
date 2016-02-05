@@ -28,13 +28,14 @@ class Login extends CI_Controller {
             }
         }
         if ($this->input->post('insc')) {
-//No repetir nombres de usuarios 
-            $this->Inscribir($this->input->post('DNI'), $this->input->post('us'), md5($this->input->post('ps')), $this->input->post('mail'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'));
-            $_SESSION['login'] = 'logueado';
-            if (isset($_SESSION['comprando'])) {
-                redirect('/Cart/realizarcompra', 'location', 301);
+            $msj = "";
+            if ($this->InscipcionOk($this->input->post('us'), $this->input->post('mail'), $this->input->post('ps'), $this->input->post('DNI'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'), $msj)) {
+
+                $this->Inscribir($this->input->post('DNI'), $this->input->post('us'), md5($this->input->post('ps')), $this->input->post('mail'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'));
+                $this->LogeaUser($this->input->post('us'), md5($this->input->post('ps')));
             } else {
-                redirect('/Welcome/index', 'location', 301);
+                $cuerpo['d1'] = $this->load->view('login', array('mensaje' => $msj, 'provincias' => $provincias), true);
+                $this->load->view('plantilla', array('cuerpo' => $cuerpo));
             }
         }
     }
@@ -54,8 +55,8 @@ class Login extends CI_Controller {
         $_SESSION['login'] = 'logueado';
         $id = $this->usuarios->DevuelveId($user, $pass);
         $_SESSION['user'] = $id[0]['idUsu'];
-        $_SESSION['nombreUser']=$user;
-       if (isset($_SESSION['comprando'])) {
+        $_SESSION['nombreUser'] = $user;
+        if (isset($_SESSION['comprando'])) {
             redirect('/Cart/realizarcompra', 'location', 301);
         } else {
             redirect('/Welcome/index', 'location', 301);
@@ -82,16 +83,27 @@ class Login extends CI_Controller {
         $this->load->helper('form');
         $this->load->model('usuarios');
         $this->load->model('provincias');
-        $provincias = $this->provincias->arrayprovincias();
-        $user = $this->usuarios->DevuelveDatosUs($_SESSION['user']);
-        $cuerpo['d1'] = $this->load->view('form_usuario', array('user' => $user, 'provincias' => $provincias), true);
-        $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+        if (!$_POST) {
+            $provincias = $this->provincias->arrayprovincias();
+            $user = $this->usuarios->DevuelveDatosUs($_SESSION['user']);
+            $cuerpo['d1'] = $this->load->view('form_usuario', array('user' => $user, 'provincias' => $provincias), true);
+            $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+        } else {
+            if ($_POST['act']) {
+                $this->ActualizarUser($this->input->post('DNI'), $this->input->post('us'), $this->input->post('mail'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'));
+            }
+            if ($_POST['cons']) {
+                $this->enviarCorreoPass($_SESSION['user']);
+            }
+            if($_POST['baja']){
+                $this->darBaja($_SESSION['user']);
+            }
+        }
     }
 
-    public function ActualizarUser($dni, $us, $ps, $mail, $nombre, $apellidos, $dir, $cp, $provincia) {
+    private function ActualizarUser($dni, $us, $mail, $nombre, $apellidos, $dir, $cp, $provincia) {
         $datos = array('dni' => $dni,
             'user' => $us,
-            'pass' => $ps,
             'mail' => $mail,
             'nombreUs' => $nombre,
             'apellidos' => $apellidos,
@@ -100,35 +112,96 @@ class Login extends CI_Controller {
             'estado' => 'alta',
             'provincias_id' => $provincia);
         $this->usuarios->ActualizarUsuario($datos);
+        redirect("/Login/datosUser", 'location', 301);
     }
 
     public function enviarCorreoPass($id) {
-        $this->load->model('usuarios');         
-        $us=$this->usuarios->DevuelveDatosUs($id);
-        $token= $this->generaToken($id, $us[0]['pass'], $us[0]['user']);
-        $url=  base_url()."";
-        $subject="Cambio de contraseña";
-        redirect("/Correo/index/".$us[0]['correo']."/$url/$subject", 'location', 301);
+        $this->load->helper('url');
+        $this->load->model('usuarios');
+        $us = $this->usuarios->DevuelveDatosUs($id);
+        $token = $this->generaToken($id, $us[0]['dni'], $us[0]['user']);
+        $subject = "cambio";
+        redirect("/Correo/cor/$id/$token/$subject", 'location', 301);
     }
-    
-    private function generaToken($id, $dni, $user){
-        $token=  sha1($id . $dni . $user);
+
+    private function generaToken($id, $dni, $user) {
+        $token = sha1($id . $dni . $user);
         return $token;
     }
-    
-    public function cambiarPass($id, $token){
-        if(!$_POST){
-        $cuerpo['d1'] = $this->load->view('camb_cont', '', true);
-        $this->load->view('plantilla', array('cuerpo' => $cuerpo));
-        }else{
+
+    public function cambiarPass($id, $token) {
+        $this->load->helper('url');
+        if (!$_POST) {
+            $cuerpo['d1'] = $this->load->view('camb_cont', '', true);
+            $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+        } else {
+            $this->load->model('usuarios');
+            $tok = $this->generaToken($id, $_POST['dni'], $_POST['user']);
+            $datos = array('pass' => md5($_POST['pass']), 'user' => $_POST['user']);
+            if ($tok == $token) {
+                $this->usuarios->ActualizarUsuario($datos);
+                redirect(base_url() . '/index.php/Login/index', 'location', 301);
+            } else {
+                echo 'error';
+            }
+        }
+    }
+
+    public function ResetPass() {
+        if (!$_POST) {
+            $this->load->helper('url');
+            $cuerpo['d1'] = $this->load->view('pideUser', '', true);
+            $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+        } else {
+            $this->load->model('usuarios');
+            $id = $this->usuarios->DevuelveId2($_POST['user']);
+            $this->enviarCorreoPass($id[0]['idUsu']);
+        }
+    }
+
+    private function InscipcionOk($usuario, $mail, $pass, $dni, $nombre, $apellidos, $direccion, $cp, $provincia, & $mensaje) {
         $this->load->model('usuarios');
-        $us=$this->usuarios->DevuelveDatosUs($id);
-        $tok= $this->generaToken($id, $us[0]['pass'], $_POST['user']);
-        $data=array('pass'=>$_POST['pass']);
-        if ($tok==$token){
-            $this->usuarios->ActualizarUsuario($data);
+        $resultado = $this->usuarios->DevuelveId2($usuario);
+        if ($usuario == "" || $pass == "" ||
+                $nombre == "" || $apellidos == "" || $direccion == "" || $cp == "" || $provincia == "") {
+            $mensaje.='Hay campos sin rellenar. <br>';
+            return false;
         }
+
+        elseif ($resultado != null) {
+            $mensaje.='El usuario ya existe. <br>';
+            return false;
         }
+
+        elseif (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+            $mensaje.='Correo incorrecto. <br>';
+            return false;
+        }
+
+        elseif (!$this->dnivalido($dni)) {
+            $mensaje.='DNI incorrecto. <br>';
+            return false;
+        }        
+        else{return true;}
+    }
+
+    private function dnivalido($dni) {
+        $letra = substr($dni, -1);
+        $numeros = substr($dni, 0, -1);
+        if (substr("TRWAGMYFPDXBNJZSQVHLCKE", $numeros % 23, 1) == $letra && strlen($letra) == 1 && strlen($numeros) == 8) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    private function darBaja($id){
+        $this->load->model('usuarios');
+        $usuario=  $this->usuarios->devuelveDatosUs($id);
+        $datos=array('estado'=>'baja', 'user'=>$usuario[0]['user'] );
+        print_r($datos);
+       $this->usuarios->ActualizarUsuario($datos);
+       $this->CerrarSesion();
     }
 
 }
