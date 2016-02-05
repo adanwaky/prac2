@@ -1,5 +1,5 @@
 <?php
-class pedidos extends CI_Model {
+class ventas extends CI_Model {
 
     public function __construct() {
         parent::__construct();

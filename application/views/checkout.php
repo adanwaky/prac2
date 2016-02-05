@@ -94,14 +94,9 @@
                             <td colspan="2">
                                 <table class="table table-condensed total-result">
                                     <tr>
-                                        <td>Subtotal</td>
+                                        <td>Total</td>
                                         <td><?= $euros ?>€</td>
                                     </tr>
-                                    <tr>
-                                        <td>Total</td>
-                                        <td><?= round($euros * 1.21, 2) ?>€</td>
-                                    </tr>
-
                                 </table>
                             </td>
                         </tr>       
@@ -109,7 +104,9 @@
                     </table>
                 </div>
                 <div align="right">
-                    <a class="btn btn-default check_out" href="">Realizar Pedido</a>
+                    <a class="btn btn-default check_out"
+                       href="<?=base_url()."index.php/Pedidos/Nuevopedido/$euros/".$_SESSION['user']?>">
+                        Realizar Pedido</a>
                 </div>
                 <br><br>
             </div>

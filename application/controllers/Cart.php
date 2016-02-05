@@ -91,16 +91,14 @@ class Cart extends CI_Controller {
         $this->load->model('usuarios');
         $this->load->model('provincias');
         $this->load->library('carrito');
-        
-
+       
         $datosUser = $this->usuarios->DevuelveDatosUs($_SESSION['user']);
         $provincia = $this->provincias->DevuelveProvincia($datosUser[0]['provincias_id']);
         $euros = $this->carrito->precio_total();
-        $carro = $this->carrito->get_content();
-        
+        $carro = $this->carrito->get_content();        
         $cuerpo['d1'] = $this->load->view('checkout', array('carro' => $carro, 'euros' => $euros,
             'datos' => $datosUser, 'provincia' => $provincia), true);
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
-    }
-
+        }
+        
 }

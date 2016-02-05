@@ -1,4 +1,7 @@
-
+<?php if ($carro == null) { ?>
+<center><div> No hay productos en el carrito</div></center>
+                        <?php
+                    } else {?>
 <form method="post">
     <section id="cart_items">
         <div class="container">
@@ -22,10 +25,7 @@
                     </thead>
                     <tbody>
 
-                        <?php if ($carro == null) { ?>
-                        <div> No hay productos en el carrito</div>
                         <?php
-                    } else {
                         if ($mensaje != null) {
                             echo $mensaje;
                         }
@@ -59,8 +59,7 @@
                                 </td>
                             </tr>
                             <?php
-                        }
-                    }
+                        }                    
                     ?>
                     </tbody>
                 </table>
@@ -75,9 +74,8 @@
                 <div class="col-sm-6">
                     <div class="total_area">
                         <ul>
-                            <li>Subtotal <span><?=$euros?>€</span></li>
-                            <li>IVA <span>21%</span></li>
-                            <li>Total <span><?= round($euros * 1.21, 2) ?>€</span></li>
+                            <li>Total <span><?=$euros?>€</span></li>
+                            
                         </ul>
                         <input type="submit" name="upd" 
                                class="btn btn-default check_out"  
@@ -90,5 +88,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section>   
 </form><!--/#do_action-->
+
+ <?php } ?>

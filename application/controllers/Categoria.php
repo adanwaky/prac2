@@ -47,7 +47,7 @@ class Categoria extends CI_Controller {
     }
     
     public function mostrarTodo($page=0){
-        $config['base_url'] = base_url() . 'index.php/categoria/mostrarTodo';
+        $config['base_url'] = base_url() .'index.php/categoria/mostrarTodo';
         $config['uri_segment']=3;
         $config['total_rows'] = $this->Productos->num_filas_tot();
         $config['per_page'] = 6;
