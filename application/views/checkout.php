@@ -4,7 +4,8 @@
         <div class="container">
             <div class="breadcrumbs">
                 <ol class="breadcrumb">
-                    <li><a href="#">Home</a></li>
+                    <li><a href="<?= base_url() ?>">Home</a></li>
+                    <li><a href="<?= base_url().'/index.php/Cart/muestraCart' ?>">Carrito</a></li>
                     <li class="active">Check out</li>
                 </ol>
             </div><!--/breadcrums-->

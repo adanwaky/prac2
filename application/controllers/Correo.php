@@ -24,7 +24,7 @@ class Correo extends CI_Controller {
     }
 
     private function EnviaCorreo( $correo, $mensaje, $subject) {
-       // $this->load->helper('url');
+        $this->load->helper('url');
         if($subject=="cambio") $asunto='Cambio de contraseña';
         $this->email->from('ventas@mercaroche.com', 'MERCAROCHE');
         $this->email->to($correo);
@@ -35,8 +35,8 @@ class Correo extends CI_Controller {
 		{
                  $cuerpo['d1'] = '<center><P>Se ha enviado un enlace a su correo electrónico<p></center>';
                 $this->load->view('plantilla', array('cuerpo' => $cuerpo));
-                //header ('refresh:2; url='.base_url());
-		}
+		}               
+                
         echo $this->email->print_debugger();
     }
 }

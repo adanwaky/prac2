@@ -12,11 +12,11 @@
                 <table class="table table-condensed">
                     <thead>
                         <tr class="cart_menu">
-                            <td class="description">Núm. Pedido</td>
-                            <td class="description">Estado</td>
-                            <td class="image">Factura</td>
-                            <td class="image">Anular</td>
-                            <td class="image">Detalles</td>
+                            <td align="center">Núm. Pedido</td>
+                            <td align="center">Estado</td>
+                            <td align="center">Factura</td>
+                            <td align="center">Detalles</td>
+                            <td align="center">Anular</td>
                             <td></td>
                         </tr>
                     </thead>
@@ -30,20 +30,22 @@
                         foreach ($pedido as $pro) {
                             ?>
                             <tr>
-                                <td class="cart_description">
+                                <td align="center" >
                                      <p><?= $pro['idPed'] ?></p> 
                                 </td>
-                                <td class="cart_description">
+                                <td align="center" >
                                     <p><?= $pro['estado'] ?></p>
                                 </td>
-                                <td class="cart_description">
-                                    <a href=""><img src="<?= base_url() . 'assets/img/albaran.jpg' ?>" alt=""></a>
+                                <td align="center" >
+                            <a href="" ><img src="<?= base_url() . 'assets/img/albaran.jpg' ?>" alt=""></a>
                                 </td>
-                                <td class="cart_description">
-                                   <a href=""><img src="<?= base_url() . 'assets/img/detalles.png' ?>" alt=""></a>
+                                <td align="center" >
+                                    <a href="<?= base_url().'index.php/pedidos/mostrarVentas/'.$pro['idPed'] ?>"><img src="<?= base_url() . 'assets/img/ver.png' ?>" alt=""></a>
                                 </td>                                
-                                <td class="cart_delete">
-                                    <a class="cart_quantity_delete" href="<?= base_url() . 'index.php/Cart/borrar/' . $pro['id'] ?>"><i class="fa fa-times"></i></a>
+                                <td class="cart_delete" align="center" >
+                                    <a class="cart_quantity_delete" 
+                                       href="<?= base_url().'index.php/pedidos/AnularPedido/'.$pro['idPed'] ?>">
+                                        <i class="fa fa-times"></i></a>
                                 </td>
                             </tr>
                             <?php

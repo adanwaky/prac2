@@ -15,4 +15,18 @@ class pedido extends CI_Model {
         return $qr->result_array();
     }
     
+    public function pedidosDe($usuario){
+        $qr=$this->db->query("SELECT idPed, estado FROM pedido where Usuario_idUsu=$usuario");
+        return $qr->result_array();
+    }
+    
+    public function ventas($id_pedido){
+        $qr=$this->db->query("SELECT * FROM venta where Pedido_idPed=$id_pedido");
+        return $qr->result_array();
+    }
+    
+    public function actualizarPedido($data){
+         $this->db->update('pedido', $data, array('idPed' => $data['idPed']));
+    }
+    
 }
