@@ -7,6 +7,7 @@ class Pedidos extends CI_Controller {
         $this->load->helper('url');
         $this->load->model('usuarios');
         $this->load->model('ventas');
+        $this->load->model('provincias');
         $this->load->library('carrito');
         $this->load->library('session');
         $user = $this->usuarios->DevuelveDatosUs($idUs);
@@ -34,9 +35,17 @@ class Pedidos extends CI_Controller {
                 'iva' => '21');
             $this->ventas->crearVenta($data);
         }
-        $this->session->unset_userdata('comprando');
-        $this->session->unset_userdata('carrito');
-        redirect('/Pedidos/MostrarPedidos', 'location', 301);
+        /*PARA PDF*/
+        $provincia = $this->provincias->DevuelveProvincia($user[0]['provincias_id']);
+        $euros = $this->carrito->precio_total();
+        
+       
+  
+        
+        //----------------
+//        $this->session->unset_userdata('comprando');
+//        $this->session->unset_userdata('carrito');
+//        redirect('/Pedidos/MostrarPedidos', 'location', 301);
     }
 
     public function MostrarPedidos() {
