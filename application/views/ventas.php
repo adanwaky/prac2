@@ -31,7 +31,7 @@
                                     <h4><a href=""><?= $pro['nombre'] ?></a></h4>
                                 </td>
                                 <td class="cart_price">
-                                    <p><?= $pro['unidades'] ?>€</p>
+                                    <p><?= $pro['unidades'] ?></p>
                                 </td>
                                 <td class="cart_total">
                                     <p class="cart_total_price">

@@ -10,6 +10,7 @@ class Pedidos extends CI_Controller {
         $this->load->model('provincias');
         $this->load->library('carrito');
         $this->load->library('session');
+        $this->load->model('productos');
         $user = $this->usuarios->DevuelveDatosUs($idUs);
 
         $datos = array('estado' => 'Pendiente',
@@ -35,22 +36,53 @@ class Pedidos extends CI_Controller {
                 'iva' => '21');
             $this->ventas->crearVenta($data);
         }
-        /*PARA PDF*/
+        /*PARA EL PDF*/
         $provincia = $this->provincias->DevuelveProvincia($user[0]['provincias_id']);
         $euros = $this->carrito->precio_total();
-        $this->load->library('fpdf', 0, 'fpdf');
-        $this->fpdf->AddPage();
-        $this->fpdf->SetFont('Arial','B',16);
-        $this->fpdf->Cell(40,10,'¡Hola, Mundo!');   
-        $this->fpdf->Output();
+        $this->load->library('pdf');
+        $this->pdf->AddPage();
+        $this->pdf->SetFont('Arial','B',13);
+        $this->EscribirDatosPersonales(utf8_decode($user[0]['nombreUs']), utf8_decode($user[0]['apellidos']),
+        utf8_decode($user[0]['direccion']), $user[0]['cp'], utf8_decode($provincia[0]['nombre']), $id_ped[0]['id']);
         
-       
+        $venta = $this->pedido->ventas($id_ped[0]['id']);
+        $ventas = [];
+        foreach ($venta as $ven) {
+            $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
+            array_push($ventas, array('img' => $detalles[0]['imagen'], 'nombre' => $detalles[0]['nombrePro'],
+                'unidades' => $ven['unidades'], 'precio' => $ven['precio']));
+        }
+        foreach ($ventas as $value){
+        $this->EscribirPedidos($value);
+        
+        }
+        $this->pdf->Output();
   
         
         //----------------
 //        $this->session->unset_userdata('comprando');
 //        $this->session->unset_userdata('carrito');
 //        redirect('/Pedidos/MostrarPedidos', 'location', 301);
+    }
+    
+    public function EscribirPedidos($data){
+        $header = array('Producto', utf8_decode('Descripción'), 'Cantidad', 'Total');
+        $this->pdf->FancyTable($header, $data);
+    }
+    
+    public function EscribirDatosPersonales($nombre, $apellidos, $direccion, $cp, $provincia, $ped){
+          
+          $this->pdf->Cell(40, 10, "Nombre: $nombre $apellidos");
+          $this->pdf->Ln(5);
+          $this->pdf->Cell(40, 10, utf8_decode('Dirección: ').$direccion);
+          $this->pdf->Ln(5);
+          $this->pdf->Cell(40, 10, utf8_decode('Código Postal: ').$cp);
+          $this->pdf->Ln(5);
+          $this->pdf->Cell(40, 10, "Provincia: $provincia");
+          $this->pdf->Ln(5);
+          $this->pdf->Cell(40, 10, utf8_decode('Núm. Pedido: ').$ped);
+          $this->pdf->Ln(20);
+          
     }
 
     public function MostrarPedidos() {
