@@ -38,6 +38,11 @@ class Pedidos extends CI_Controller {
         /*PARA PDF*/
         $provincia = $this->provincias->DevuelveProvincia($user[0]['provincias_id']);
         $euros = $this->carrito->precio_total();
+        $this->load->library('fpdf', 0, 'fpdf');
+        $this->fpdf->AddPage();
+        $this->fpdf->SetFont('Arial','B',16);
+        $this->fpdf->Cell(40,10,'¡Hola, Mundo!');   
+        $this->fpdf->Output();
         
        
   
