@@ -7,7 +7,7 @@
                         <form method="post">
                             Nombre usuario: <input type="text" name="user"><br>
                             DNI: <input type="text" name="dni"placeholder="12345678X"><br>
-                            Nueva contraseña: <input type="pass" name="pass"><br>
+                            Nueva contraseña: <input type="password" name="pass"><br>
                             <input type="submit" 
                                    style="background-color:#FF8A02;color:white;"  
                                    value='Cambiar contraseña'> 

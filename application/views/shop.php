@@ -10,7 +10,7 @@
                                 <div class="single-products">
                                     <div class="productinfo text-center">
                                        <?php echo anchor('detalle/index/'.$producto['idPro'],'  
-                                <img src= "'.base_url() . 'assets/img/' . $producto['imagen'].'"/>')?>
+                                <img class="img-responsive"  src= "'.base_url() . 'assets/img/' . $producto['imagen'].'"/>')?>
                                         <h2><?= $producto['precio'] ?> €</h2>
                                             <p><?= $producto['nombrePro'] ?></p>
                                         <?php if($producto['stock']>0){?>
