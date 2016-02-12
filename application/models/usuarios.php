@@ -45,6 +45,11 @@ class usuarios extends CI_Model {
         return $qr->result_array();
     }
     
+    public function ExisteNombre($user, $id){
+        $qr = $this->db->query("select idUsu from usuario where user='$user'and idUsu!=$id");        
+        return $qr->result_array();
+    }
+    
     
 
 }

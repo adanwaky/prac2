@@ -37,7 +37,8 @@
                                     <p><?= $pro['estado'] ?></p>
                                 </td>
                                 <td align="center" >
-                            <a href="" ><img src="<?= base_url() . 'assets/img/albaran.jpg' ?>" alt=""></a>
+                            <a href="<?=base_url().'index.php/pedidos/mostrarFactura/'.$pro['idPed']?>" ><img src="<?= base_url() . 'assets/img/albaran.jpg' ?>" alt=""></a>/
+                               <a href="<?=base_url().'index.php/pedidos/descargarFactura/'.$pro['idPed']?>" ><img src="<?= base_url() . 'assets/img/pdf.png' ?>" alt=""></a>
                                 </td>
                                 <td align="center" >
                                     <a href="<?= base_url().'index.php/pedidos/mostrarVentas/'.$pro['idPed'] ?>"><img src="<?= base_url() . 'assets/img/ver.png' ?>" alt=""></a>

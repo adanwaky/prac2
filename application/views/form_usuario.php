@@ -1,6 +1,7 @@
 
 <section id="form"><!--form-->
     <div class="container">
+        <?php if(isset($mensaje)) echo $mensaje;?>
         <div class="row" >
             <div class="col-sm-4">
                 <div class="signup-form" ><!--sign up form-->

@@ -29,4 +29,9 @@ class pedido extends CI_Model {
          $this->db->update('pedido', $data, array('idPed' => $data['idPed']));
     }
     
+    public function pedidonum($id){
+        $qr=$this->db->query("SELECT * FROM pedido where idPed=$id");
+        return $qr->result_array();
+    }
+    
 }

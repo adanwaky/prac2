@@ -4,25 +4,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Cart extends CI_Controller {
 
+    public function __construct() {
+        parent::__construct();
+        $this->load->library('session');
+        $this->load->helper('url');
+        $this->load->helper('form');
+        $this->load->model('usuarios');
+        $this->load->model('provincias');
+        $this->load->library('carrito');
+        $this->load->model('productos');
+    }
+
     public function muestraCart($mensaje = null) {
         if (!$this->input->post('upd') && !$this->input->post('comprar')) {
-            $this->load->library('carrito');
-            $this->load->helper('url');
-            $this->load->library('session');
-
             $euros = $this->carrito->precio_total();
             $carro = $this->carrito->get_content();
             $cuerpo['d1'] = $this->load->view('cart', array('carro' => $carro, 'euros' => $euros, 'mensaje' => $mensaje), true);
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
-            $this->load->helper('url');
-            $this->load->library('session');
             if ($this->input->post('upd')) {
-                $this->actualizar($_POST);
+                $this->actualizar($this->input->post());
             }
             if ($this->input->post('comprar')) {
                 if (!$this->session->userdata('login')) {
-                    $_SESSION['comprando'] = 'comprando';
+                   $this->session->set_userdata(array('comprando'=>'comprando'));
                     redirect('/Login/index', 'location', 301);
                 } else {
                     $this->realizarcompra($this->session->userdata('user'));
@@ -32,9 +37,6 @@ class Cart extends CI_Controller {
     }
 
     public function guardar($id, $unidades = 1) { //GUARDA DESDE INICIO
-        $this->load->model('productos');
-        $this->load->library('carrito');
-        $this->load->helper('url');
         $producto = $this->productos->DetallesDe($id);
         $prod = array('id' => $producto[0]['idPro'],
             'nombre' => $producto[0]['nombrePro'],
@@ -46,9 +48,6 @@ class Cart extends CI_Controller {
     }
 
     public function guardarPro($id, $unidades) { //GUARDA EN VISTA DETALLE
-        $this->load->model('productos');
-        $this->load->library('carrito');
-        $this->load->helper('url');
         $producto = $this->productos->DetallesDe($id);
         $prod = array('id' => $producto[0]['idPro'],
             'nombre' => $producto[0]['nombrePro'],
@@ -59,8 +58,6 @@ class Cart extends CI_Controller {
     }
 
     public function borrar($id) {
-        $this->load->library('carrito');
-        $this->load->helper('url');
         $unique_id = md5($id);
         $this->carrito->remove_producto($unique_id);
         redirect('/Cart/muestraCart', 'location', 301);
@@ -71,8 +68,6 @@ class Cart extends CI_Controller {
             if ($value == "" || $value == "Actualizar") {
                 
             } else {
-                $this->load->model('productos');
-                $this->load->helper('url');
                 $producto = $this->productos->DetallesDe($key);
                 if ($value > $producto[0]['stock']) {
                     $mensaje = 'No hay suficiente stock';
@@ -86,19 +81,13 @@ class Cart extends CI_Controller {
     }
 
     public function realizarcompra() {
-        $this->load->helper('url');
-        $this->load->library('session');
-        $this->load->model('usuarios');
-        $this->load->model('provincias');
-        $this->load->library('carrito');
-       
-        $datosUser = $this->usuarios->DevuelveDatosUs($_SESSION['user']);
+        $datosUser = $this->usuarios->DevuelveDatosUs($this->session->userdata('user'));
         $provincia = $this->provincias->DevuelveProvincia($datosUser[0]['provincias_id']);
         $euros = $this->carrito->precio_total();
-        $carro = $this->carrito->get_content();   
+        $carro = $this->carrito->get_content();
         $cuerpo['d1'] = $this->load->view('checkout', array('carro' => $carro, 'euros' => $euros,
             'datos' => $datosUser, 'provincia' => $provincia), true);
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
-        }
-        
+    }
+
 }

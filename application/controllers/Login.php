@@ -4,45 +4,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Login extends CI_Controller {
 
-    public function index() {
-
+    public function __construct() {
+        parent::__construct();
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->helper('form');
         $this->load->model('usuarios');
         $this->load->model('provincias');
-        $provincias = $this->provincias->arrayprovincias();
+    }
 
+    public function index() {
+        $provincias = $this->provincias->arrayprovincias();
         if (!$this->input->post('login') && !$this->input->post('insc')) {
             $cuerpo['d1'] = $this->load->view('login', array('provincias' => $provincias), true);
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
             if ($this->input->post('login')) {
-                if ($this->usuarios->existeUser($this->input->post('user'), md5($this->input->post('pass')))) {
-                    $this->LogeaUser($this->input->post('user'), md5($this->input->post('pass')));
-                } else {
-                    $mensaje = 'Nombre de usuario o contraseña incorrecta';
-                    $cuerpo['d1'] = $this->load->view('login', array('mensaje' => $mensaje, 'provincias' => $provincias), true);
-                    $this->load->view('plantilla', array('cuerpo' => $cuerpo));
-                }
+                $this->SiEsLogin();
             }
         }
         if ($this->input->post('insc')) {
-            $msj = "";
-            if ($this->InscipcionOk($this->input->post('us'), $this->input->post('mail'), $this->input->post('ps'), $this->input->post('DNI'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'), $msj)) {
-
-                $this->Inscribir($this->input->post('DNI'), $this->input->post('us'), md5($this->input->post('ps')), $this->input->post('mail'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'));
-                $this->LogeaUser($this->input->post('us'), md5($this->input->post('ps')));
-            } else {
-                $cuerpo['d1'] = $this->load->view('login', array('mensaje' => $msj, 'provincias' => $provincias), true);
-                $this->load->view('plantilla', array('cuerpo' => $cuerpo));
-            }
+            $this->SiEsInscribir();
         }
     }
 
     public function CerrarSesion() {
-        $this->load->library('session');
-        $this->load->helper('url');
         $this->session->unset_userdata('login');
         $this->session->unset_userdata('user');
         $this->session->unset_userdata('comprando');
@@ -51,12 +37,11 @@ class Login extends CI_Controller {
     }
 
     public function LogeaUser($user, $pass) {
-
-        $_SESSION['login'] = 'logueado';
+        $this->session->set_userdata(array('login'=>'logueado'));
         $id = $this->usuarios->DevuelveId($user, $pass);
-        $_SESSION['user'] = $id[0]['idUsu'];
-        $_SESSION['nombreUser'] = $user;
-        if (isset($_SESSION['comprando'])) {
+        $this->session->set_userdata(array('user'=>$id[0]['idUsu']));
+         $this->session->set_userdata(array('nombreUser'=>$user));
+        if ($this->session->userdata('comprando')!=null) {
             redirect('/Cart/realizarcompra', 'location', 301);
         } else {
             redirect('/Welcome/index', 'location', 301);
@@ -78,25 +63,20 @@ class Login extends CI_Controller {
     }
 
     public function datosUser() {
-        $this->load->helper('url');
-        $this->load->library('session');
-        $this->load->helper('form');
-        $this->load->model('usuarios');
-        $this->load->model('provincias');
-        if (!$_POST) {
-            $provincias = $this->provincias->arrayprovincias();
-            $user = $this->usuarios->DevuelveDatosUs($_SESSION['user']);
+        $provincias = $this->provincias->arrayprovincias();
+        $user = $this->usuarios->DevuelveDatosUs($this->session->userdata('user'));
+        if (!$this->input->post()) {
             $cuerpo['d1'] = $this->load->view('form_usuario', array('user' => $user, 'provincias' => $provincias), true);
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
-            if ($_POST['act']) {
-                $this->ActualizarUser($this->input->post('DNI'), $this->input->post('us'), $this->input->post('mail'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'));
+            if ($this->input->post('act')) {
+                $this->SiEsActualizar();
             }
-            if ($_POST['cons']) {
-                $this->enviarCorreoPass($_SESSION['user']);
+            if ($this->input->post('cons')) {
+                $this->enviarCorreoPass($this->session->userdata('user'));
             }
-            if($_POST['baja']){
-                $this->darBaja($_SESSION['user']);
+            if ($this->input->post('baja')) {
+                $this->darBaja($this->session->userdata('user'));
             }
         }
     }
@@ -115,9 +95,7 @@ class Login extends CI_Controller {
         redirect("/Login/datosUser", 'location', 301);
     }
 
-    public function enviarCorreoPass($id) {
-        $this->load->helper('url');
-        $this->load->model('usuarios');
+    public function enviarCorreoPass($id) {       
         $us = $this->usuarios->DevuelveDatosUs($id);
         $token = $this->generaToken($id, $us[0]['dni'], $us[0]['user']);
         $subject = "cambio";
@@ -129,60 +107,52 @@ class Login extends CI_Controller {
         return $token;
     }
 
-    public function cambiarPass($id, $token) {
-        $this->load->helper('url');
-        if (!$_POST) {
+    public function cambiarPass($id, $token) {       
+        if (!$this->input->post()) {
             $cuerpo['d1'] = $this->load->view('camb_cont', '', true);
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
-            $this->load->model('usuarios');
-            $tok = $this->generaToken($id, $_POST['dni'], $_POST['user']);
-            $datos = array('pass' => md5($_POST['pass']), 'user' => $_POST['user']);
+            $tok = $this->generaToken($id, $this->input->post('dni'), $this->input->post('user'));
+            $datos = array('pass' => md5($this->input->post('pass')), 'user' => $this->input->post('user'));
             if ($tok == $token) {
                 $this->usuarios->ActualizarUsuario($datos);
                 redirect(base_url() . '/index.php/Login/index', 'location', 301);
             } else {
-                echo 'error';
+                $mensaje = 'DNI o usuario incorrecto';
+                $cuerpo['d1'] = $this->load->view('camb_cont', array('mensaje' => $mensaje), true);
+                $this->load->view('plantilla', array('cuerpo' => $cuerpo));
             }
         }
     }
 
     public function ResetPass() {
-        if (!$_POST) {
-            $this->load->helper('url');
+        if (!$this->input->post()) {
             $cuerpo['d1'] = $this->load->view('pideUser', '', true);
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
-            $this->load->model('usuarios');
-            $id = $this->usuarios->DevuelveId2($_POST['user']);
+            $id = $this->usuarios->DevuelveId2($this->input->post('user'));
             $this->enviarCorreoPass($id[0]['idUsu']);
         }
     }
 
-    private function InscipcionOk($usuario, $mail, $pass, $dni, $nombre, $apellidos, $direccion, $cp, $provincia, & $mensaje) {
-        $this->load->model('usuarios');
-        $resultado = $this->usuarios->DevuelveId2($usuario);
+    private function InscripcionOk($usuario, $mail, $pass, $dni, $nombre, $apellidos, $direccion, $cp, $provincia, & $mensaje) {
+        $resultado = $this->usuarios->ExisteNombre($usuario, $this->session->userdata('user'));
         if ($usuario == "" || $pass == "" ||
                 $nombre == "" || $apellidos == "" || $direccion == "" || $cp == "" || $provincia == "") {
             $mensaje.='Hay campos sin rellenar. <br>';
             return false;
-        }
-
-        elseif ($resultado != null) {
+        } elseif ($resultado != null) {
             $mensaje.='El usuario ya existe. <br>';
             return false;
-        }
-
-        elseif (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+        } elseif (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
             $mensaje.='Correo incorrecto. <br>';
             return false;
-        }
-
-        elseif (!$this->dnivalido($dni)) {
+        } elseif (!$this->dnivalido($dni)) {
             $mensaje.='DNI incorrecto. <br>';
             return false;
-        }        
-        else{return true;}
+        } else {
+            return true;
+        }
     }
 
     private function dnivalido($dni) {
@@ -194,14 +164,45 @@ class Login extends CI_Controller {
             return false;
         }
     }
+
+    private function darBaja($id) {
+        $usuario = $this->usuarios->devuelveDatosUs($id);
+        $datos = array('estado' => 'baja', 'user' => $usuario[0]['user']);
+        $this->usuarios->ActualizarUsuario($datos);
+        $this->CerrarSesion();
+    }
+
+    private function SiEsInscribir() {
+        $msj = "";
+        if ($this->InscripcionOk($this->input->post('us'), $this->input->post('mail'), $this->input->post('ps'), $this->input->post('DNI'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'), $msj)) {
+
+            $this->Inscribir($this->input->post('DNI'), $this->input->post('us'), md5($this->input->post('ps')), $this->input->post('mail'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'));
+            $this->LogeaUser($this->input->post('us'), md5($this->input->post('ps')));
+        } else {
+            $cuerpo['d1'] = $this->load->view('login', array('mensaje' => $msj, 'provincias' => $provincias), true);
+            $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+        }
+    }
+
+    private function SiEsLogin() {
+
+        if ($this->usuarios->existeUser($this->input->post('user'), md5($this->input->post('pass')))) {
+            $this->LogeaUser($this->input->post('user'), md5($this->input->post('pass')));
+        } else {
+            $mensaje = 'Nombre de usuario o contraseña incorrecta';
+            $cuerpo['d1'] = $this->load->view('login', array('mensaje' => $mensaje, 'provincias' => $provincias), true);
+            $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+        }
+    }
     
-    private function darBaja($id){
-        $this->load->model('usuarios');
-        $usuario=  $this->usuarios->devuelveDatosUs($id);
-        $datos=array('estado'=>'baja', 'user'=>$usuario[0]['user'] );
-        print_r($datos);
-       $this->usuarios->ActualizarUsuario($datos);
-       $this->CerrarSesion();
+    private function SiEsActualizar(){
+        $msj = "";
+                if ($this->InscripcionOk($this->input->post('us'), $this->input->post('mail'), 'aa', $this->input->post('DNI'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'), $msj)) {
+                    $this->ActualizarUser($this->input->post('DNI'), $this->input->post('us'), $this->input->post('mail'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'));
+                } else {
+                    $cuerpo['d1'] = $this->load->view('form_usuario', array('user' => $user, 'provincias' => $provincias, 'mensaje' => $msj), true);
+                    $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+                }
     }
 
 }

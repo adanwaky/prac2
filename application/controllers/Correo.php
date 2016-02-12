@@ -1,14 +1,19 @@
 <?php
 
-if (!defined('BASEPATH'))
-    exit('No direct script access allowed');
+if (!defined('BASEPATH')){
+exit('No direct script access allowed');}
 
 class Correo extends CI_Controller {
 
-    public function cor($id, $token, $subject) {
+    public function __construct() {
+        parent::__construct();
         $this->load->library('email');
-        $this->load->helper('url');
         $this->load->model('usuarios');
+        $this->load->helper('url');
+        $this->load->library('session');
+    }
+
+    public function cor($id, $token, $subject) {
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = 'ssl://smtp.googlemail.com';
         $config['smtp_port'] = 465;
@@ -28,9 +33,9 @@ class Correo extends CI_Controller {
     }
 
     private function EnviaCorreo($correo, $mensaje, $subject) {
-        $this->load->helper('url');
-        if ($subject == "cambio")
-            $asunto = 'Cambio de contraseña';
+
+        if ($subject == "cambio"){
+        $asunto = 'Cambio de contraseña';}
         $this->email->from('ventas@mercaroche.com', 'MERCAROCHE');
         $this->email->to($correo);
         $this->email->subject($asunto);
@@ -45,10 +50,6 @@ class Correo extends CI_Controller {
     }
 
     public function EnviarPdf($id, $id_ped) {
-        $this->load->library('email');
-        $this->load->model('usuarios');
-        $this->load->helper('url');
-        $this->load->library('session');
         $us = $this->usuarios->DevuelveDatosUs($id);
         $correo = $us[0]['mail'];
         $config['protocol'] = 'smtp';
