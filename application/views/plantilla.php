@@ -99,13 +99,24 @@
         ?>
 
         <footer id="footer"><!--Footer-->
+            <div class="footer-widget">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-2">
+						<div class="single-widget">
+                                                    <h2><a href="<?=base_url().'index.php/ExportarXML/exportar'?>">Exportar XML</a></h2>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+            </div>
 
 
 
             <div class="footer-bottom">
                 <div class="container">
                     <div class="row">
-                        <p class="pull-center">Copyright © 2013 E-SHOPPER Inc. All rights reserved.</p>
+                        <p class="pull-center">Copyright © 2013 MERCAROCHE Inc. Todos los derechos reservados.</p>
 
                     </div>
                 </div>

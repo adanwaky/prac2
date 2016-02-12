@@ -12,11 +12,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/prac2/application/controllers/Login.php</file>
             <file>file:/C:/xampp/htdocs/prac2/application/controllers/Pedidos.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/controllers/Correo.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/controllers/Cart.php</file>
-            <file>file:/C:/xampp/htdocs/prac2/application/controllers/Categoria.php</file>
+            <file>file:/C:/xampp/htdocs/prac2/application/views/plantilla.php</file>
+            <file>file:/C:/xampp/htdocs/prac2/application/controllers/ExportarXML.php</file>
+            <file>file:/C:/xampp/htdocs/prac2/application/models/productos.php</file>
             <file>file:/C:/xampp/htdocs/prac2/application/controllers/Detalle.php</file>
         </group>
     </open-files>
