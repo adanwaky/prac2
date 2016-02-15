@@ -11,6 +11,8 @@ class Pedidos extends CI_Controller {
         $this->load->model('provincias');
         $this->load->library('carrito');
         $this->load->model('productos');
+        $this->load->model('pedido');
+        $this->load->model('ventas');
     }
 
     public function Nuevopedido($importe, $idUs) {
@@ -25,11 +27,11 @@ class Pedidos extends CI_Controller {
             'user_cp' => $user[0]['cp'],
             'user_provincia' => $user[0]['provincias_id'],
             'Usuario_idUsu' => $idUs);
-        
+
         $this->pedido->crearPedido($datos);
         $carro = $this->carrito->get_content();
         $id_ped = $this->pedido->Ultimopedido();
-        
+
         foreach ($carro as $producto) {
             $data = array('Producto_idPro' => $producto['id'],
                 'Pedido_idPed' => $id_ped[0]['id'],
@@ -37,7 +39,11 @@ class Pedidos extends CI_Controller {
                 'precio' => $producto['total'],
                 'iva' => '21');
             $this->ventas->crearVenta($data);
+            $stock = $this->productos->devuelveStock($producto['id']);
+            $nuevoStock = $stock[0]['stock'] - $producto['unidades'];
+            $this->productos->DisminuyeStock($producto['id'], array('stock' => $nuevoStock));
         }
+
         $this->Enviarpdf($user, $id_ped);
     }
 
@@ -80,9 +86,9 @@ class Pedidos extends CI_Controller {
         $this->pdf->Ln(20);
     }
 
-    public function MostrarPedidos() {
+    public function MostrarPedidos($mensaje="") {
         $pedido = $this->pedido->pedidosDe($this->session->userdata('user'));
-        $cuerpo['d1'] = $this->load->view('pedidos', array('pedido' => $pedido), true);
+        $cuerpo['d1'] = $this->load->view('pedidos', array('pedido' => $pedido, 'mensaje'=>$mensaje), true);
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
 
@@ -99,9 +105,16 @@ class Pedidos extends CI_Controller {
     }
 
     public function AnularPedido($idPedido) {
-        $data = array('idPed' => $idPedido, 'estado' => 'Anulado');
-        $this->pedido->actualizarPedido($data);
-        redirect('/Pedidos/MostrarPedidos', 'location', 301);
+        $pedido = $this->pedido->pedidonum($idPedido);
+        if ($pedido[0]['estado'] == 'Procesado') {
+            $msj = "El pedido está procesado y es imposible anularlo";
+            $this->MostrarPedidos($msj);
+        } else {
+            $data = array('idPed' => $idPedido, 'estado' => 'Anulado');
+            $this->pedido->actualizarPedido($data);
+            $this->MostrarPedidos();
+            
+        }
     }
 
     public function mostrarFactura($id) {

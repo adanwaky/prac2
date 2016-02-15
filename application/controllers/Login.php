@@ -20,11 +20,11 @@ class Login extends CI_Controller {
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
             if ($this->input->post('login')) {
-                $this->SiEsLogin();
+                $this->SiEsLogin($provincias);
             }
         }
         if ($this->input->post('insc')) {
-            $this->SiEsInscribir();
+            $this->SiEsInscribir($provincias);
         }
     }
 
@@ -70,7 +70,7 @@ class Login extends CI_Controller {
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
             if ($this->input->post('act')) {
-                $this->SiEsActualizar();
+                $this->SiEsActualizar($provincias);
             }
             if ($this->input->post('cons')) {
                 $this->enviarCorreoPass($this->session->userdata('user'));
@@ -172,7 +172,7 @@ class Login extends CI_Controller {
         $this->CerrarSesion();
     }
 
-    private function SiEsInscribir() {
+    private function SiEsInscribir($provincias) {
         $msj = "";
         if ($this->InscripcionOk($this->input->post('us'), $this->input->post('mail'), $this->input->post('ps'), $this->input->post('DNI'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'), $msj)) {
 
@@ -184,7 +184,7 @@ class Login extends CI_Controller {
         }
     }
 
-    private function SiEsLogin() {
+    private function SiEsLogin($provincias) {
 
         if ($this->usuarios->existeUser($this->input->post('user'), md5($this->input->post('pass')))) {
             $this->LogeaUser($this->input->post('user'), md5($this->input->post('pass')));
@@ -195,7 +195,7 @@ class Login extends CI_Controller {
         }
     }
     
-    private function SiEsActualizar(){
+    private function SiEsActualizar($provincias){
         $msj = "";
                 if ($this->InscripcionOk($this->input->post('us'), $this->input->post('mail'), 'aa', $this->input->post('DNI'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'), $msj)) {
                     $this->ActualizarUser($this->input->post('DNI'), $this->input->post('us'), $this->input->post('mail'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'));

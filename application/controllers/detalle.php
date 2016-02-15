@@ -14,7 +14,7 @@ class Detalle extends CI_Controller {
     }
 
     public function index($id) {
-        $producto = $this->Productos->DetallesDe($id);
+        $producto = $this->productos->DetallesDe($id);
         if (@!$this->input->post('add')) {
             $this->mostrarDetalle($id, $producto);
         } else {
@@ -28,7 +28,7 @@ class Detalle extends CI_Controller {
     }
 
     public function mostrarDetalle($id, $producto) {
-        $categorias = $this->Productos->Categorias();
+        $categorias = $this->productos->Categorias();
         $cuerpo['d1'] = $this->load->view('category', array('cat' => $categorias), true);
         $cuerpo['d2'] = $this->load->view('product-details', array('pro' => $producto), true);
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));

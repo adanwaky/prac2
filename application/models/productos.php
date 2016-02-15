@@ -50,13 +50,17 @@ class productos extends CI_Model {
     public function TodosProductos($page, $per_page){
         
         $qr = $this->db->query('select * from producto '
-                . "where idPro>0 LIMIT $page, $per_page;");
+                . "where idPro>0 and stock>0 LIMIT $page, $per_page;");
         return $qr->result_array(); 
     }
     public function ProductosDeCat($categoria)
     {
         $qr = $this->db->get_where('producto', array('Categoria_idCat'=>$categoria));
         return $qr->result_array();
+    }
+    public function devuelveStock($id){
+        $qr = $this->db->query("select stock from producto where idPro=$id");
+        return $qr->result_array(); 
     }
     
 }
