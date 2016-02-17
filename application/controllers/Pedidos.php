@@ -64,10 +64,10 @@ class Pedidos extends CI_Controller {
         foreach ($venta as $ven) {
             $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
             array_push($ventas, array('descripcion' => $detalles[0]['descripcionPro'], 'nombre' => $detalles[0]['nombrePro'],
-                'unidades' => $ven['unidades'], 'precio' => $ven['precio']));
+                'unidades' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']));
         }
         $this->EscribirCabecera($ventas);
-        $this->pdf->total($euros);
+        $this->pdf->total(number_format($euros * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']);
         $this->pdf->AliasNbPages();
         $this->pdf->Output('F', 'assets/pedidos/pedido.pdf', true);
         redirect("/Correo/EnviarPdf/" . $user[0]['idUsu'] . "/" . $id_ped[0]['id'] . "", 'location', 301);
@@ -129,10 +129,10 @@ class Pedidos extends CI_Controller {
         foreach ($venta as $ven) {
             $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
             array_push($ventas, array('descripcion' => $detalles[0]['descripcionPro'], 'nombre' => $detalles[0]['nombrePro'],
-                'unidades' => $ven['unidades'], 'precio' => $ven['precio']));
+                'unidades' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']));
         }
         $this->EscribirCabecera($ventas);
-        $this->pdf->total($pedido[0]['importe']);
+        $this->pdf->total(number_format($pedido[0]['importe'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']);
         $this->pdf->AliasNbPages();
         $this->pdf->Output();
     }
@@ -152,10 +152,10 @@ class Pedidos extends CI_Controller {
         foreach ($venta as $ven) {
             $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
             array_push($ventas, array('descripcion' => $detalles[0]['descripcionPro'], 'nombre' => $detalles[0]['nombrePro'],
-                'unidades' => $ven['unidades'], 'precio' => $ven['precio']));
+                'unidades' => $ven['unidades'], 'precio' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']));
         }
         $this->EscribirCabecera($ventas);
-        $this->pdf->total($pedido[0]['importe']);
+        $this->pdf->total(number_format($pedido[0]['importe'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']);
         $this->pdf->AliasNbPages();
         $this->pdf->Output('D', 'FACTURA.pdf', true);
     }

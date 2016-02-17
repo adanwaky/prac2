@@ -15,9 +15,9 @@
                             <h2 class=""><?= $pro[0]['nombrePro'] ?></h2>
                             <p class="">Web ID: <?= $pro[0]['idPro'] ?></p>
                             <p> Descripción: <?= $pro[0]['descripcionPro'] ?></p><br>
-                            <span><?= $pro[0]['precio']*(float)$_SESSION['tarifa'].' '.$_SESSION['moneda']?> </span>
+                            <span><?= number_format($pro[0]['precio'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']?> </span>
                             <?php if ($pro[0]['stock'] > 0) { ?>
-                                <form method="post">
+                            <form method="post">
                                     <label>Cantidad:</label> 
                                     <input type="text" value="1" name="cant" size="2">
                                     <input type="submit" name="add" 

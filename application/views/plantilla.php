@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="icon" type="image/png" href="<?= base_url() . 'assets/' ?>img/favicon.png" />
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
@@ -41,20 +42,24 @@
                             <div class="btn-group pull-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                                        EUR
+                                        <?php echo $_SESSION['moneda']?>
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <?php
 
                                         function creaSelectMoneda() {
-                                            $XML = simplexml_load_file("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+                                            $fecha=date('Y-m-d');
+                                            $XML = simplexml_load_file('./assets/xml_monedas/'.$fecha.'-moneda.xml');
+
                                             foreach ($XML->Cube->Cube->Cube as $rate) {
                                                 echo "<li>";
                                                 echo "<a href=" . base_url() . 'index.php/Welcome/cambiarTarifa/' . $rate['currency'] . ">" . $rate['currency'] . "</a>";
                                                 echo "</li>";
                                             }
                                         }
+
+                                        echo "<li><a href=" . base_url() . 'index.php/Welcome/cambiarTarifa/EUR' . "> EUR</a></li>";
                                         creaSelectMoneda();
                                         ?>
                                     </ul>
@@ -74,8 +79,8 @@
                                                 <li><?php echo anchor('Login/CerrarSesion', 'Cerrar Sesión') ?></li>
                                             </ul></li><?php } else { ?>
                                         <li><?php echo anchor('Login/index', '<i class="fa fa-lock"></i>Login') ?></li>
-                                    <?php }
-                                    ?>
+<?php }
+?>
                                     <li><?php echo anchor('Cart/muestraCart', '<i class="fa fa-shopping-cart"></i>Carrito') ?></li>
 
                                 </ul>

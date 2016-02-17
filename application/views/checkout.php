@@ -67,7 +67,7 @@
                                         <p>Web ID: <?= $pro['id'] ?></p>
                                     </td>
                                     <td class="cart_price">
-                                        <p><?= $pro['precio']*(float)$_SESSION['tarifa'].' '.$_SESSION['moneda'] ?></p>
+                                        <p><?= number_format($pro['precio'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda'] ?></p>
                                     </td>
                                     <td class="cart_quantity">
                                         <div class="cart_quantity_button">
@@ -77,7 +77,7 @@
                                     <td class="cart_total">
                                         <p class="cart_total_price">
                                             <?=
-                                            $pro['total']*(float)$_SESSION['tarifa'].' '.$_SESSION['moneda']
+                                            number_format($pro['total'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']
                                             ?>
                                         </p>
                                     </td>
@@ -96,7 +96,7 @@
                                 <table class="table table-condensed total-result">
                                     <tr>
                                         <td>Total</td>
-                                        <td><?= $euros*(float)$_SESSION['tarifa'].' '.$_SESSION['moneda']?></td>
+                                        <td><?= number_format($euros * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']?></td>
                                     </tr>
                                 </table>
                             </td>

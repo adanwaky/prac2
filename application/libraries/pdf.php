@@ -34,7 +34,7 @@ class pdf extends FPDF {
         $this->SetFont('', 'B');
         // Cabecera
         $this->Cell(3);
-        $w = array(40, 100, 25, 25);
+        $w = array(40, 100, 20, 30);
         for ($i = 0; $i < count($header); $i++)
             $this->Cell($w[$i], 7, $header[$i], 1, 0, 'C', true);
         $this->Ln();
@@ -50,7 +50,7 @@ class pdf extends FPDF {
             $this->Cell($w[0], 6, utf8_decode($row['nombre']), 'LR', 0, 'L', $fill);
             $this->Cell($w[1], 6, utf8_decode($row['descripcion']), 'LR', 0, 'L', $fill);
             $this->Cell($w[2], 6, number_format($row['unidades']), 'LR', 0, 'R', $fill);
-            $this->Cell($w[3], 6, $row['precio'] .' '. iconv('UTF-8', 'windows-1252', '€'), 'LR', 0, 'R', $fill);
+            $this->Cell($w[3], 6, $row['precio'], 'LR', 0, 'R', $fill);
             $this->Ln();
             if ($this->GetY()>264){
                 $this->AddPage();
@@ -68,7 +68,7 @@ class pdf extends FPDF {
         // Movernos a la derecha
         $this->Cell(142);
         // Título
-        $this->Cell(45, 15, 'TOTAL: '.$euros .' '. iconv('UTF-8', 'windows-1252', '€'), 1, 0, 'C');
+        $this->Cell(55, 15, 'TOTAL: '.$euros, 1, 0, 'C');
         // Salto de línea
         $this->Ln(20);
     }

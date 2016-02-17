@@ -4,7 +4,7 @@
             <div class="breadcrumbs">
                 <ol class="breadcrumb">
                     <li><a href="<?= base_url() ?>">Home</a></li>
-                    <li><a href="<?= base_url()?>index.php/Pedidos/MostrarPedidos">Pedidos</a></li>
+                    <li><a href="<?= base_url() ?>index.php/Pedidos/MostrarPedidos">Pedidos</a></li>
                     <li class="active">Ventas</li>
                 </ol>
             </div>
@@ -36,11 +36,11 @@
                                 <td class="cart_total">
                                     <p class="cart_total_price">
                                         <?=
-                                        $pro['precio']
-                                        ?>€
+                                        number_format($pro['precio'] * (float) $_SESSION['tarifa'], 2, '.', '') . ' ' . $_SESSION['moneda']
+                                        ?>
                                     </p>
                                 </td>
-                                
+
                             </tr>
                             <?php
                         }
