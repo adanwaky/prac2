@@ -40,7 +40,7 @@
                                     <p>Web ID: <?= $pro['id'] ?></p>
                                 </td>
                                 <td class="cart_price">
-                                    <p><?= $pro['precio'] ?>€</p>
+                                    <p><?= $pro['precio']*(float)$_SESSION['tarifa'].' '.$_SESSION['moneda'] ?></p>
                                 </td>
                                 <td class="cart_quantity">
                                     <div class="cart_quantity_button">
@@ -50,7 +50,7 @@
                                 <td class="cart_total">
                                     <p class="cart_total_price">
                                         <?=
-                                        $pro['total']
+                                        $pro['total']*(float)$_SESSION['tarifa'].' '.$_SESSION['moneda']
                                         ?>€
                                     </p>
                                 </td>
@@ -74,7 +74,7 @@
                 <div class="col-sm-6">
                     <div class="total_area">
                         <ul>
-                            <li>Total <span><?=$euros?>€</span></li>
+                            <li>Total <span><?=$euros*(float)$_SESSION['tarifa'].' '.$_SESSION['moneda']?></span></li>
                             
                         </ul>
                         <input type="submit" name="upd" 

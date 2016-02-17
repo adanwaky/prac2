@@ -33,14 +33,38 @@
                         <div class="col-sm-4">
                             <div class="logo pull-left">
                                 <a href="<?= base_url() ?>"><img src="<?= base_url() . 'assets/' ?>images/home/logo.png" alt="" /></a>
-
                             </div>
 
                         </div>
+
                         <div class="col-sm-8">
+                            <div class="btn-group pull-right">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
+                                        EUR
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <?php
+
+                                        function creaSelectMoneda() {
+                                            $XML = simplexml_load_file("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+                                            foreach ($XML->Cube->Cube->Cube as $rate) {
+                                                echo "<li>";
+                                                echo "<a href=" . base_url() . 'index.php/Welcome/cambiarTarifa/' . $rate['currency'] . ">" . $rate['currency'] . "</a>";
+                                                echo "</li>";
+                                            }
+                                        }
+                                        creaSelectMoneda();
+                                        ?>
+                                    </ul>
+                                </div>
+
+
+                            </div>
                             <div class="shop-menu pull-right">
                                 <ul class="nav navbar-nav collapse navbar-collapse">
-                                    <?php if (isset($_SESSION['user'])) { ?>
+<?php if (isset($_SESSION['user'])) { ?>
                                         <li>Hola, <?php echo $_SESSION['nombreUser'] ?>!</li>
                                         <li class="dropdown">
                                             <a href="#"><i class="fa fa-user"></i> Cuenta<i class="fa fa-angle-down"></i></a>
@@ -100,15 +124,15 @@
 
         <footer id="footer"><!--Footer-->
             <div class="footer-widget">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-2">
-						<div class="single-widget">
-                                                    <h2><a href="<?=base_url().'index.php/ExportarXML/exportar'?>">Exportar XML</a></h2>
-                                                </div>
-                                        </div>
-                                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="single-widget">
+                                <h2><a href="<?= base_url() . 'index.php/ExportarXML/exportar' ?>">Exportar XML</a></h2>
+                            </div>
                         </div>
+                    </div>
+                </div>
             </div>
 
 
