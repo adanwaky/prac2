@@ -36,10 +36,8 @@ class Welcome extends CI_Controller {
                 return $rate['rate'];
             }
         }
-    }
+    } 
     
-    
-
     function cambiarTarifa($moneda) {
         $tarifa = $this->devuelveTarifa($moneda);
         $this->session->set_userdata(array('moneda' => (string) $moneda, 'tarifa' => (string) $tarifa));

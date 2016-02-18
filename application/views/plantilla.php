@@ -52,11 +52,11 @@
                                             $fecha = date('Y-m-d');
                                             $filename = '././assets/xml_monedas/' . $fecha . '-moneda.xml';
                                             if (file_exists('./assets/xml_monedas/' . $fecha . '-moneda.xml')) {
-                                                $XML = simplexml_load_file('./assets/xml_monedas/'.$fecha.'-moneda.xml');
+                                                $XML = simplexml_load_file('./assets/xml_monedas/' . $fecha . '-moneda.xml');
                                             } else {
-                                                $XML=simplexml_load_file("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"); 
-                                                echo '<pre>'.$XML.'</pre>';
-                                                file_put_contents($filename, $XML);
+                                                $cadena = file_get_contents("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
+                                                file_put_contents($filename, $cadena);
+                                                $XML = simplexml_load_file('./assets/xml_monedas/' . $fecha . '-moneda.xml');
                                             }
                                             foreach ($XML->Cube->Cube->Cube as $rate) {
                                                 echo "<li>";
@@ -75,7 +75,7 @@
                             </div>
                             <div class="shop-menu pull-right">
                                 <ul class="nav navbar-nav collapse navbar-collapse">
-<?php if (isset($_SESSION['user'])) { ?>
+                                    <?php if (isset($_SESSION['user'])) { ?>
                                         <li>Hola, <?php echo $_SESSION['nombreUser'] ?>!</li>
                                         <li class="dropdown">
                                             <a href="#"><i class="fa fa-user"></i> Cuenta<i class="fa fa-angle-down"></i></a>
@@ -85,8 +85,8 @@
                                                 <li><?php echo anchor('Login/CerrarSesion', 'Cerrar Sesión') ?></li>
                                             </ul></li><?php } else { ?>
                                         <li><?php echo anchor('Login/index', '<i class="fa fa-lock"></i>Login') ?></li>
-<?php }
-?>
+                                    <?php }
+                                    ?>
                                     <li><?php echo anchor('Cart/muestraCart', '<i class="fa fa-shopping-cart"></i>Carrito') ?></li>
 
                                 </ul>
@@ -127,11 +127,11 @@
             </div><!--/header-bottom-->
         </header><!--/header-->
 
-<?php
-foreach ($cuerpo as $cue) {
-    echo $cue;
-}
-?>
+        <?php
+        foreach ($cuerpo as $cue) {
+            echo $cue;
+        }
+        ?>
 
         <footer id="footer"><!--Footer-->
             <div class="footer-widget">
@@ -140,6 +140,14 @@ foreach ($cuerpo as $cue) {
                         <div class="col-sm-2">
                             <div class="single-widget">
                                 <h2><a href="<?= base_url() . 'index.php/ExportarXML/exportar' ?>">Exportar XML</a></h2>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="single-widget">
+                                <form type="get">
+                                <h2><input type="file"></h2>
+                                <input type="submit">
+                                </form>
                             </div>
                         </div>
                     </div>

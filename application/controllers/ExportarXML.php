@@ -22,7 +22,7 @@ class ExportarXML extends CI_Controller {
 
         Header('Content-type: text/xml; charset=utf-8');
         Header('Content-type: octec/stream');
-        Header('Content-disposition: filename="camisetasycategorias.xml"');
+        Header('Content-disposition: filename="pro_car_mercaroche.xml"');
         print($xml->asXML());
     }
 
