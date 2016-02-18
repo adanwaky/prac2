@@ -29,16 +29,8 @@ class Welcome extends CI_Controller {
             return 1;
         }
         $fecha=date('Y-m-d');
-        $filename=' ./assets/xml_monedas/'.$fecha.'-moneda.xml';
-        if(file_exists('./assets/xml_monedas/'.$fecha.'-moneda.xml')){
-            $XML = simplexml_load_file('./assets/xml_monedas/'.$fecha.'-moneda.xml');
-        }
-        else{
-            $XML=simplexml_load_file("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
-            file_put_contents($filename, $XML);
-            
-        }
-        
+         $XML = simplexml_load_file('./assets/xml_monedas/'.$fecha.'-moneda.xml');
+                
         foreach ($XML->Cube->Cube->Cube as $rate) {
             if ($rate["currency"] == $moneda) {
                 return $rate['rate'];

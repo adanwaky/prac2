@@ -42,16 +42,22 @@
                             <div class="btn-group pull-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                                        <?php echo $_SESSION['moneda']?>
+                                        <?php echo $_SESSION['moneda'] ?>
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <?php
 
                                         function creaSelectMoneda() {
-                                            $fecha=date('Y-m-d');
-                                            $XML = simplexml_load_file('./assets/xml_monedas/'.$fecha.'-moneda.xml');
-
+                                            $fecha = date('Y-m-d');
+                                            $filename = '././assets/xml_monedas/' . $fecha . '-moneda.xml';
+                                            if (file_exists('./assets/xml_monedas/' . $fecha . '-moneda.xml')) {
+                                                $XML = simplexml_load_file('./assets/xml_monedas/'.$fecha.'-moneda.xml');
+                                            } else {
+                                                $XML=simplexml_load_file("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"); 
+                                                echo '<pre>'.$XML.'</pre>';
+                                                file_put_contents($filename, $XML);
+                                            }
                                             foreach ($XML->Cube->Cube->Cube as $rate) {
                                                 echo "<li>";
                                                 echo "<a href=" . base_url() . 'index.php/Welcome/cambiarTarifa/' . $rate['currency'] . ">" . $rate['currency'] . "</a>";
@@ -121,11 +127,11 @@
             </div><!--/header-bottom-->
         </header><!--/header-->
 
-        <?php
-        foreach ($cuerpo as $cue) {
-            echo $cue;
-        }
-        ?>
+<?php
+foreach ($cuerpo as $cue) {
+    echo $cue;
+}
+?>
 
         <footer id="footer"><!--Footer-->
             <div class="footer-widget">
