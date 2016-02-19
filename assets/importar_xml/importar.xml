@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <categorias>
     <categoria>
-        <idCat>6</idCat>
         <codCat>jug</codCat>
         <nombreCat>Juguetes</nombreCat>
         <descripcionCat>Especiales juguetes</descripcionCat>
@@ -9,8 +8,6 @@
         <se_muestra>1</se_muestra>
         <productos>
             <producto>
-                <idPro>1</idPro>
-                <Categoria_idCat>6</Categoria_idCat>
                 <CodPro>COP</CodPro>
                 <nombrePro>Coche de Carreras Pocoyo</nombrePro>
                 <precio>33.95</precio>
@@ -26,8 +23,6 @@
                 <se_muestra>1</se_muestra>
             </producto>
             <producto>
-                <idPro>2</idPro>
-                <Categoria_idCat>6</Categoria_idCat>
                 <CodPro>BIC</CodPro>
                 <nombrePro>Bicicleta Disney Cars</nombrePro>
                 <precio>99</precio>
@@ -46,7 +41,6 @@
     </categoria>
     
     <categoria>
-        <idCat>7</idCat>
         <codCat>inf</codCat>
         <nombreCat>Informática</nombreCat>
         <descripcionCat>Ordenadores Portátiles Baratos, Laptops, Notebooks y mucho más</descripcionCat>
@@ -54,8 +48,6 @@
         <se_muestra>1</se_muestra>
         <productos>
             <producto>
-                <idPro>1</idPro>
-                <Categoria_idCat>7</Categoria_idCat>
                 <CodPro>PHP</CodPro>
                 <nombrePro>Portatil HP 250 con i5, 4GB, 500GB, 15,6”'</nombrePro>
                 <precio>459</precio>
@@ -71,8 +63,6 @@
                 <se_muestra>1</se_muestra>
             </producto>
             <producto>
-                <idPro>2</idPro>
-                <Categoria_idCat>7</Categoria_idCat>
                 <CodPro>LEK</CodPro>
                 <nombrePro>Libro Electrónico Kobo AURA H20 6,8"</nombrePro>
                 <precio>174</precio>

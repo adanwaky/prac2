@@ -144,10 +144,7 @@
                         </div>
                         <div class="col-sm-2">
                             <div class="single-widget">
-                                <form type="get">
-                                <h2><input type="file"></h2>
-                                <input type="submit">
-                                </form>
+                                <h2><a href="<?= base_url() . 'index.php/ImportarXML' ?>">Importar XML</a></h2>
                             </div>
                         </div>
                     </div>

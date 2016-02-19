@@ -8,6 +8,7 @@ class xml extends CI_Model {
     
     public function mas_categoria($data){
          $this->db->insert('categoria', $data);
+         return $this->db->insert_id();
     }
     
     public function mas_productos($data){
