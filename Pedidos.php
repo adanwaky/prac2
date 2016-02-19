@@ -11,13 +11,11 @@ class Pedidos extends CI_Controller {
         $this->load->model('provincias');
         $this->load->library('carrito');
         $this->load->model('productos');
-        $this->load->model('pedido');
-        $this->load->model('ventas');
     }
 
     public function Nuevopedido($importe, $idUs) {
         $user = $this->usuarios->DevuelveDatosUs($idUs);
-        $datos = ['estado' => 'Pendiente',
+        $datos = array('estado' => 'Pendiente',
             'importe' => $importe,
             'user_user' => $user[0]['user'],
             'user_mail' => $user[0]['mail'],
@@ -26,12 +24,12 @@ class Pedidos extends CI_Controller {
             'user_direccion' => $user[0]['direccion'],
             'user_cp' => $user[0]['cp'],
             'user_provincia' => $user[0]['provincias_id'],
-            'Usuario_idUsu' => $idUs];
-
+            'Usuario_idUsu' => $idUs);
+        
         $this->pedido->crearPedido($datos);
         $carro = $this->carrito->get_content();
         $id_ped = $this->pedido->Ultimopedido();
-
+        
         foreach ($carro as $producto) {
             $data = array('Producto_idPro' => $producto['id'],
                 'Pedido_idPed' => $id_ped[0]['id'],
@@ -39,11 +37,7 @@ class Pedidos extends CI_Controller {
                 'precio' => $producto['total'],
                 'iva' => '21');
             $this->ventas->crearVenta($data);
-            $stock = $this->productos->devuelveStock($producto['id']);
-            $nuevoStock = $stock[0]['stock'] - $producto['unidades'];
-            $this->productos->DisminuyeStock($producto['id'], array('stock' => $nuevoStock));
         }
-
         $this->Enviarpdf($user, $id_ped);
     }
 
@@ -64,10 +58,10 @@ class Pedidos extends CI_Controller {
         foreach ($venta as $ven) {
             $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
             array_push($ventas, array('descripcion' => $detalles[0]['descripcionPro'], 'nombre' => $detalles[0]['nombrePro'],
-                'unidades' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']));
+                'unidades' => $ven['unidades'], 'precio' => $ven['precio']));
         }
         $this->EscribirCabecera($ventas);
-        $this->pdf->total(number_format($euros * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']);
+        $this->pdf->total($euros);
         $this->pdf->AliasNbPages();
         $this->pdf->Output('F', 'assets/pedidos/pedido.pdf', true);
         redirect("/Correo/EnviarPdf/" . $user[0]['idUsu'] . "/" . $id_ped[0]['id'] . "", 'location', 301);
@@ -86,9 +80,9 @@ class Pedidos extends CI_Controller {
         $this->pdf->Ln(20);
     }
 
-    public function MostrarPedidos($mensaje="") {
+    public function MostrarPedidos() {
         $pedido = $this->pedido->pedidosDe($this->session->userdata('user'));
-        $cuerpo['d1'] = $this->load->view('pedidos', array('pedido' => $pedido, 'mensaje'=>$mensaje), true);
+        $cuerpo['d1'] = $this->load->view('pedidos', array('pedido' => $pedido), true);
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
 
@@ -105,16 +99,9 @@ class Pedidos extends CI_Controller {
     }
 
     public function AnularPedido($idPedido) {
-        $pedido = $this->pedido->pedidonum($idPedido);
-        if ($pedido[0]['estado'] == 'Procesado') {
-            $msj = "El pedido está procesado y es imposible anularlo";
-            $this->MostrarPedidos($msj);
-        } else {
-            $data = array('idPed' => $idPedido, 'estado' => 'Anulado');
-            $this->pedido->actualizarPedido($data);
-            $this->MostrarPedidos();
-            
-        }
+        $data = array('idPed' => $idPedido, 'estado' => 'Anulado');
+        $this->pedido->actualizarPedido($data);
+        redirect('/Pedidos/MostrarPedidos', 'location', 301);
     }
 
     public function mostrarFactura($id) {
@@ -129,10 +116,10 @@ class Pedidos extends CI_Controller {
         foreach ($venta as $ven) {
             $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
             array_push($ventas, array('descripcion' => $detalles[0]['descripcionPro'], 'nombre' => $detalles[0]['nombrePro'],
-                'unidades' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']));
+                'unidades' => $ven['unidades'], 'precio' => $ven['precio']));
         }
         $this->EscribirCabecera($ventas);
-        $this->pdf->total(number_format($pedido[0]['importe'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']);
+        $this->pdf->total($pedido[0]['importe']);
         $this->pdf->AliasNbPages();
         $this->pdf->Output();
     }
@@ -152,10 +139,10 @@ class Pedidos extends CI_Controller {
         foreach ($venta as $ven) {
             $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
             array_push($ventas, array('descripcion' => $detalles[0]['descripcionPro'], 'nombre' => $detalles[0]['nombrePro'],
-                'unidades' => $ven['unidades'], 'precio' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']));
+                'unidades' => $ven['unidades'], 'precio' => $ven['precio']));
         }
         $this->EscribirCabecera($ventas);
-        $this->pdf->total(number_format($pedido[0]['importe'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']);
+        $this->pdf->total($pedido[0]['importe']);
         $this->pdf->AliasNbPages();
         $this->pdf->Output('D', 'FACTURA.pdf', true);
     }

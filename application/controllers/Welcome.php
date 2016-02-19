@@ -7,16 +7,17 @@ class Welcome extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->library('session');
-    }
-    public function index() {
         $this->load->library('pagination');
         $this->load->model('Productos');
         $this->load->helper('url');
+        $this->load->helper('monedas');
+        
+    }
+    public function index() {       
         
         if (!isset($_SESSION['moneda'])) {
             $this->cambiarTarifa('EUR');
-        }
-               
+        }               
         $categorias = $this->Productos->Categorias();
         $productos = $this->Productos->ProductosDestacados();
         $cuerpo['d1'] = $this->load->view('category', array('cat' => $categorias), true);
