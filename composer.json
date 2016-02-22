@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.2.4",
-		"setasign/fpdf": "dev-master"
+		"setasign/fpdf": "dev-master",
+		"phpoffice/phpexcel": "dev-master"
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"
