@@ -9,10 +9,15 @@ class Categoria extends CI_Controller {
         $this->load->library('pagination');
         $this->load->model('Productos');
         $this->load->helper('url');
-        $this->load->library('session');
+        $this->load->library('session');        
+        $this->load->helper('monedas');
     }
 
     public function mostrar($categoria, $page=0) {
+        if ($this->Productos->ExisteCategoria($categoria)==0){
+            $cuerpo['d2'] = $this->load->view('404', '', true);
+        }
+        else{
         $config['base_url'] = base_url() . 'index.php/categoria/mostrar/' . $categoria;
         $config['uri_segment']=4;
         $config['total_rows'] = $this->Productos->num_filas($categoria);
@@ -43,7 +48,7 @@ class Categoria extends CI_Controller {
         
         $categorias = $this->Productos->Categorias();
         $cuerpo['d1'] = $this->load->view('category', array('cat'=>$categorias), true);
-        $cuerpo['d2'] = $this->load->view('shop', $productos, true);
+        $cuerpo['d2'] = $this->load->view('shop', $productos, true);}
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
     

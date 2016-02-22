@@ -13,6 +13,7 @@ class Pedidos extends CI_Controller {
         $this->load->model('productos');
         $this->load->model('pedido');
         $this->load->model('ventas');
+        $this->load->helper('monedas');
     }
 
     public function Nuevopedido($importe, $idUs) {
@@ -64,10 +65,10 @@ class Pedidos extends CI_Controller {
         foreach ($venta as $ven) {
             $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
             array_push($ventas, array('descripcion' => $detalles[0]['descripcionPro'], 'nombre' => $detalles[0]['nombrePro'],
-                'unidades' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']));
+                'unidades' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'], 2, '.', '') . ' ' . $_SESSION['moneda']));
         }
         $this->EscribirCabecera($ventas);
-        $this->pdf->total(number_format($euros * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']);
+        $this->pdf->total(number_format($euros * (float) $_SESSION['tarifa'], 2, '.', '') . ' ' . $_SESSION['moneda']);
         $this->pdf->AliasNbPages();
         $this->pdf->Output('F', 'assets/pedidos/pedido.pdf', true);
         redirect("/Correo/EnviarPdf/" . $user[0]['idUsu'] . "/" . $id_ped[0]['id'] . "", 'location', 301);
@@ -86,55 +87,66 @@ class Pedidos extends CI_Controller {
         $this->pdf->Ln(20);
     }
 
-    public function MostrarPedidos($mensaje="") {
+    public function MostrarPedidos($mensaje = "") {
         $pedido = $this->pedido->pedidosDe($this->session->userdata('user'));
-        $cuerpo['d1'] = $this->load->view('pedidos', array('pedido' => $pedido, 'mensaje'=>$mensaje), true);
+        $cuerpo['d1'] = $this->load->view('pedidos', array('pedido' => $pedido, 'mensaje' => $mensaje), true);
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
 
     public function MostrarVentas($idPedido) {
-        $venta = $this->pedido->ventas($idPedido);
-        $ventas = [];
-        foreach ($venta as $ven) {
-            $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
-            array_push($ventas, array('img' => $detalles[0]['imagen'], 'nombre' => $detalles[0]['nombrePro'],
-                'unidades' => $ven['unidades'], 'precio' => $ven['precio']));
+        $usuario = $this->pedido->UsuarioDePedido($idPedido);
+        if (@$usuario[0]['Usuario_idUsu'] != $this->session->userdata('user')) {
+            $cuerpo['d1'] = $this->load->view('404', '', true);
+            $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+        } else {
+            $venta = $this->pedido->ventas($idPedido);
+            $ventas = [];
+            foreach ($venta as $ven) {
+                $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
+                array_push($ventas, array('img' => $detalles[0]['imagen'], 'nombre' => $detalles[0]['nombrePro'],
+                    'unidades' => $ven['unidades'], 'precio' => $ven['precio']));
+            }
+            $cuerpo['d1'] = $this->load->view('ventas', array('ventas' => $ventas), true);
+            $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         }
-        $cuerpo['d1'] = $this->load->view('ventas', array('ventas' => $ventas), true);
-        $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
 
     public function AnularPedido($idPedido) {
         $pedido = $this->pedido->pedidonum($idPedido);
         if ($pedido[0]['estado'] == 'Procesado') {
-            $msj = "El pedido está procesado y es imposible anularlo";
-            $this->MostrarPedidos($msj);
+            $msj = "El_pedido_esta_procesado_y_es_imposible_anularlo";
+            redirect("/Pedidos/MostrarPedidos/$msj",'location',301);
         } else {
             $data = array('idPed' => $idPedido, 'estado' => 'Anulado');
             $this->pedido->actualizarPedido($data);
-            $this->MostrarPedidos();
-            
+           redirect('/Pedidos/MostrarPedidos/','location',301);
         }
     }
 
     public function mostrarFactura($id) {
-        $pedido = $this->pedido->pedidonum($id);
-        $provincia = $this->provincias->DevuelveProvincia($pedido[0]['user_provincia']);
-        $this->load->library('pdf');
-        $this->pdf->AddPage();
-        $this->pdf->SetFont('Arial', 'B', 13);
-        $this->EscribirDatosPersonales(utf8_decode($pedido[0]['user_nombreUs']), utf8_decode($pedido[0]['user_apellidos']), utf8_decode($pedido[0]['user_direccion']), $pedido[0]['user_cp'], utf8_decode($provincia[0]['nombre']), $id);
-        $venta = $this->pedido->ventas($id);
-        $ventas = [];
-        foreach ($venta as $ven) {
-            $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
-            array_push($ventas, array('descripcion' => $detalles[0]['descripcionPro'], 'nombre' => $detalles[0]['nombrePro'],
-                'unidades' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']));
+        $usuario = $this->pedido->UsuarioDePedido($id);
+        if (@$usuario[0]['Usuario_idUsu'] != $this->session->userdata('user')) {
+            $cuerpo['d1'] = $this->load->view('404', '', true);
+            $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+        } else {
+            $pedido = $this->pedido->pedidonum($id);
+            $provincia = $this->provincias->DevuelveProvincia($pedido[0]['user_provincia']);
+            $this->load->library('pdf');
+            $this->pdf->AddPage();
+            $this->pdf->SetFont('Arial', 'B', 13);
+            $this->EscribirDatosPersonales(utf8_decode($pedido[0]['user_nombreUs']), utf8_decode($pedido[0]['user_apellidos']), utf8_decode($pedido[0]['user_direccion']), $pedido[0]['user_cp'], utf8_decode($provincia[0]['nombre']), $id);
+            $venta = $this->pedido->ventas($id);
+            $ventas = [];
+            foreach ($venta as $ven) {
+                $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
+                array_push($ventas, array('descripcion' => $detalles[0]['descripcionPro'], 'nombre' => $detalles[0]['nombrePro'],
+                    'unidades' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'], 2, '.', '') . ' ' . $_SESSION['moneda']));
+            }
+            $this->EscribirCabecera($ventas);
+            $this->pdf->total(number_format($pedido[0]['importe'] * (float) $_SESSION['tarifa'], 2, '.', '') . ' ' . $_SESSION['moneda']);
+            $this->pdf->AliasNbPages();
+            $this->pdf->Output();
         }
-        $this->EscribirCabecera($ventas);
-        $this->pdf->total(number_format($pedido[0]['importe'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']);
-        $this->pdf->AliasNbPages();
-        $this->pdf->Output();
     }
 
     public function descargarFactura($id) {
@@ -152,10 +164,10 @@ class Pedidos extends CI_Controller {
         foreach ($venta as $ven) {
             $detalles = $this->productos->DetallesDe($ven['Producto_idPro']);
             array_push($ventas, array('descripcion' => $detalles[0]['descripcionPro'], 'nombre' => $detalles[0]['nombrePro'],
-                'unidades' => $ven['unidades'], 'precio' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']));
+                'unidades' => $ven['unidades'], 'precio' => $ven['unidades'], 'precio' => number_format($ven['precio'] * (float) $_SESSION['tarifa'], 2, '.', '') . ' ' . $_SESSION['moneda']));
         }
         $this->EscribirCabecera($ventas);
-        $this->pdf->total(number_format($pedido[0]['importe'] * (float) $_SESSION['tarifa'],2, '.','' ). ' ' . $_SESSION['moneda']);
+        $this->pdf->total(number_format($pedido[0]['importe'] * (float) $_SESSION['tarifa'], 2, '.', '') . ' ' . $_SESSION['moneda']);
         $this->pdf->AliasNbPages();
         $this->pdf->Output('D', 'FACTURA.pdf', true);
     }

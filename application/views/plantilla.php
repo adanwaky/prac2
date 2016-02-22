@@ -46,12 +46,13 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <?php
+                                        <?php                                       
                                         echo "<li><a href=" . base_url() . 'index.php/Welcome/cambiarTarifa/EUR' . "> EUR</a></li>";
-                                        creaSelectMoneda();
+                                       creaSelectMoneda();                                       
                                         ?>
                                     </ul>
                                 </div>
+                                
 
 
                             </div>

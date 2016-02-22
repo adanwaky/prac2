@@ -10,7 +10,8 @@ class Correo extends CI_Controller {
         $this->load->library('email');
         $this->load->model('usuarios');
         $this->load->helper('url');
-        $this->load->library('session');
+        $this->load->library('session');        
+        $this->load->helper('monedas');
     }
 
     public function cor($id, $token, $subject) {
@@ -45,7 +46,6 @@ class Correo extends CI_Controller {
             $cuerpo['d1'] = '<center><P>Se ha enviado un enlace a su correo electrónico<p></center>';
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         }
-
         echo $this->email->print_debugger();
     }
 
@@ -75,5 +75,4 @@ class Correo extends CI_Controller {
         }
         echo $this->email->print_debugger();
     }
-
 }

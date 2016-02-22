@@ -16,7 +16,7 @@ class Welcome extends CI_Controller {
     public function index() {       
         
         if (!isset($_SESSION['moneda'])) {
-            $this->cambiarTarifa('EUR');
+            $this->session->set_userdata(array('moneda'=>'EUR', 'tarifa'=>1));
         }               
         $categorias = $this->Productos->Categorias();
         $productos = $this->Productos->ProductosDestacados();

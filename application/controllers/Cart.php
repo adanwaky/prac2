@@ -12,7 +12,8 @@ class Cart extends CI_Controller {
         $this->load->model('usuarios');
         $this->load->model('provincias');
         $this->load->library('carrito');
-        $this->load->model('productos');
+        $this->load->model('productos');        
+        $this->load->helper('monedas');
     }
 
     public function muestraCart($mensaje = null) {

@@ -11,6 +11,7 @@ class Login extends CI_Controller {
         $this->load->helper('form');
         $this->load->model('usuarios');
         $this->load->model('provincias');
+        $this->load->helper('monedas');
     }
 
     public function index() {
