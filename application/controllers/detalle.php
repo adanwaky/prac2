@@ -1,7 +1,7 @@
 <?php
 
 class Detalle extends CI_Controller {
-    
+
     public function __construct() {
         parent::__construct();
         $this->load->library('session');
@@ -11,20 +11,33 @@ class Detalle extends CI_Controller {
         $this->load->model('provincias');
         $this->load->library('carrito');
         $this->load->model('productos');
+        $this->load->helper('monedas');
     }
 
     public function index($id) {
+        $this->iniciar();
         $producto = $this->productos->DetallesDe($id);
-        if (@!$this->input->post('add')) {
-            $this->mostrarDetalle($id, $producto);
+        if ($producto == null) {
+           $cuerpo['d1']=$this->load->view('404', '', true);
+           $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
-            if ($this->input->post('cant') < 0 || $this->input->post('cant') > $producto[0]['stock']) {
-                $producto[0]['pasado'] = 1;
+            if (@!$this->input->post('add')) {
                 $this->mostrarDetalle($id, $producto);
             } else {
-                $this->guardar($id, $producto);
+                if ($this->input->post('cant') < 0 || $this->input->post('cant') > $producto[0]['stock']) {
+                    $producto[0]['pasado'] = 1;
+                    $this->mostrarDetalle($id, $producto);
+                } else {
+                    $this->guardar($id, $producto);
+                }
             }
         }
+    }
+    
+    public function iniciar(){
+        if (!isset($_SESSION['moneda'])) {
+            $this->session->set_userdata(array('moneda'=>'EUR', 'tarifa'=>1));
+        }   
     }
 
     public function mostrarDetalle($id, $producto) {

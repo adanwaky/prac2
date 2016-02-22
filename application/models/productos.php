@@ -61,6 +61,10 @@ class productos extends CI_Model {
     public function devuelveStock($id){
         $qr = $this->db->query("select stock from producto where idPro=$id");
         return $qr->result_array(); 
+    }    
+    
+    public function ExisteCategoria($cat){
+        return $this->db->get_where('categoria', array('idCat'=>$cat))->num_rows();
     }
     
 }

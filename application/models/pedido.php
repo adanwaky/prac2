@@ -34,4 +34,9 @@ class pedido extends CI_Model {
         return $qr->result_array();
     }
     
+    public function UsuarioDePedido($idPedido){
+        $qr=$this->db->query("SELECT Usuario_idUsu FROM pedido where idPed=$idPedido");
+        return $qr->result_array();
+    }
+    
 }
