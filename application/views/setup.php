@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
     <head>
         <link rel="icon" type="image/png" href="<?= base_url() . 'assets/' ?>img/favicon.png" />
@@ -33,7 +32,7 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="logo pull-left">
-                                <a href="<?= base_url() ?>"><img src="<?= base_url() . 'assets/' ?>images/home/logo.png" alt="" /></a>
+                                <a href="#"><img src="<?= base_url() . 'assets/' ?>images/home/logo.png" alt="" /></a>
                             </div>
 
                         </div>
@@ -42,35 +41,14 @@
                             <div class="btn-group pull-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
-                                        <?php echo $_SESSION['moneda'] ?>
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu">
-                                        <?php                                       
-                                        echo "<li><a href=" . base_url() . 'index.php/Welcome/cambiarTarifa/EUR' . "> EUR</a></li>";
-                                       creaSelectMoneda();                                       
-                                        ?>
-                                    </ul>
                                 </div>
-                                
-
 
                             </div>
                             <div class="shop-menu pull-right">
                                 <ul class="nav navbar-nav collapse navbar-collapse">
-                                    <?php if (isset($_SESSION['user'])) { ?>
-                                        <li>Hola, <?php echo $_SESSION['nombreUser'] ?>!</li>
-                                        <li class="dropdown">
-                                            <a href="#"><i class="fa fa-user"></i> Cuenta<i class="fa fa-angle-down"></i></a>
-                                            <ul role="menu" class="sub-menu">
-                                                <li><?php echo anchor("Login/datosUser", "Datos") ?></li>
-                                                <li><?php echo anchor('Pedidos/MostrarPedidos', 'Pedidos') ?></li>
-                                                <li><?php echo anchor('Login/CerrarSesion', 'Cerrar Sesión') ?></li>
-                                            </ul></li><?php } else { ?>
-                                        <li><?php echo anchor('Login/index', '<i class="fa fa-lock"></i>Login') ?></li>
-                                    <?php }
-                                    ?>
-                                    <li><?php echo anchor('Cart/muestraCart', '<i class="fa fa-shopping-cart"></i>Carrito') ?></li>
+                                    
 
                                 </ul>
                             </div>
@@ -93,12 +71,8 @@
                             </div>
                             <div class="mainmenu pull-left">
                                 <ul class="nav navbar-nav collapse navbar-collapse">
-                                    <li><a href="<?= base_url() ?>" class="active">Home</a></li>
-                                    <li class="dropdown"><a href="#">Tienda<i class="fa fa-angle-down"></i></a>
-                                        <ul role="menu" class="sub-menu">
-                                            <li><?php echo anchor('Cart/muestraCart', 'Carrito') ?></li>
-                                            <li><?php echo anchor('Categoria/mostrarTodo', 'Productos') ?></li>
-                                        </ul>
+                                    <li><a href="#" class="active">Home</a></li>
+                                    <li class="dropdown"><a href="#">Tienda<i class="fa fa-angle-down"></i></a>                                        
                                     </li>
 
                                 </ul>
@@ -110,31 +84,29 @@
             </div><!--/header-bottom-->
         </header><!--/header-->
 
-        <?php
-        foreach ($cuerpo as $cue) {
-            echo $cue;
-        }
-        ?>
+       <div class="container">
+            <div class="row" >
+                <div class="col-sm-4">
+                    <div class="signup-form" >
+                        <form method="post">
+                            Servidor: <input type="text" name="servidor"><br>
+                            Usuario: <input type="text" name="usuario"><br>
+                            Contraseña: <input type="text" name="pass"><br>
+                            Base de datos: <input type="text" name="base_datos"><br>
+                            <input type="submit" 
+                                   style="background-color:#FF8A02;color:white;"  
+                                   value='Cambiar contraseña'> 
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <footer id="footer"><!--Footer-->
             <div class="footer-widget">
                 <div class="container">
                     <div class="row">
-                        <div class="col-sm-2">
-                            <div class="single-widget">
-                                <h2><a href="<?= base_url() . 'index.php/ExportarXML/exportar' ?>">Exportar XML</a></h2>
-                            </div>
-                        </div>
-                        <div class="col-sm-2">
-                            <div class="single-widget">
-                                <h2><a href="<?= base_url() . 'index.php/ImportarXML' ?>">Importar XML</a></h2>
-                            </div>
-                        </div>
-                         <div class="col-sm-2">
-                            <div class="single-widget">
-                                <h2><a href="<?= base_url() . 'index.php/importarExcel' ?>">Importar Excel</a></h2>
-                            </div>
-                        </div>
+                       
                     </div>
                 </div>
             </div>

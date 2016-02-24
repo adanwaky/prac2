@@ -1,5 +1,4 @@
-<html>
-    <body> 
+
         <div class="container">
             <?php if(isset($mensaje)){
             echo $mensaje;}?>
@@ -18,6 +17,3 @@
                 </div>
             </div>
         </div>
-    </body>    
-</html>
-
