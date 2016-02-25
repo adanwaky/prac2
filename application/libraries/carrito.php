@@ -3,7 +3,6 @@
 class carrito {
 
     const CARRITO_ID = 'carrito';
-
     protected $carrito = array();
 
     public function __construct() {
