@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 if (!function_exists('creaSelectMoneda')) {
 
-    function creaSelectMoneda() {        
+    function creaSelectMoneda($url) {          
         $fecha = date('Y-m-d');
         $filename = '././assets/xml_monedas/' . $fecha . '-moneda.xml';
         
@@ -17,7 +17,7 @@ if (!function_exists('creaSelectMoneda')) {
         }
         foreach ($XML->Cube->Cube->Cube as $rate) {
             echo "<li>";
-            echo "<a href=" . base_url() . 'index.php/Welcome/cambiarTarifa/' . $rate['currency'] . ">" . $rate['currency'] . "</a>";
+            echo "<a href=" . base_url() . 'index.php/Welcome/cambiarTarifa/' . $rate['currency'] .'/'.$url. ">" . $rate['currency'] . "</a>";
             echo "</li>";
         }
     }

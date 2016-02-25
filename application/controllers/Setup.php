@@ -21,7 +21,6 @@ class Setup extends CI_Controller {
         if (!$this->input->post())
             $this->load->view('setup');
         else {
-
             $mysqli = new mysqli($_POST['servidor'], $_POST['usuario'], 
                     $_POST['password'], $_POST['base_datos']);
             $mysqli->set_charset("utf8");
@@ -33,17 +32,15 @@ class Setup extends CI_Controller {
                 $this->LeerSql();
             }
 
-            if (!$HayError) {//Creamos el fichero config con los datos de configuración para la bd que se han pasado
+            if (!$HayError) {//Creamos el fichero database con los datos de configuración para la bd que se han pasado
                 $fichero = fopen('./config/database.php', 'w');
                 if (!$fichero) {
                     echo '<h1>No se puede abrir el fichero.</h1>';
                 }
-
                 $this->crearFichero($hostname, $username, $password, $database);
-
                 fwrite($fichero, $cadena, strlen($cadena));
                 fclose($fichero);
-                include_once CTRL . 'redireccionar.php';
+                redirect('/Welcome/index', 'location', 301);
             }
         }
     }

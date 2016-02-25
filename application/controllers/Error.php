@@ -7,6 +7,9 @@ class Error extends CI_Controller {
         $this->load->library('session');        
         $this->load->helper('monedas');
     }
+    /**
+     * CARGA LA VISTA DE ERROR 404
+     */
     public function index(){
         $this->load->helper('url');
         

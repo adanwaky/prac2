@@ -13,30 +13,39 @@ class Login extends CI_Controller {
         $this->load->model('provincias');
         $this->load->helper('monedas');
     }
-
+/**
+ * CARGA LA VISTA DE LOGIN
+ */
     public function index() {
-        $provincias = $this->provincias->arrayprovincias();
-        if (!$this->input->post('login') && !$this->input->post('insc')) {
+        $provincias = $this->provincias->arrayprovincias(); //COGE LAS PROVINCIAS 
+        if (!$this->input->post('login') && !$this->input->post('insc')) { //SI NO SE HA DADO A LOGIN NI INSCRIBIRSE
+            //MUESTRA LA VISTA
             $cuerpo['d1'] = $this->load->view('login', array('provincias' => $provincias), true);
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
-            if ($this->input->post('login')) {
-                $this->SiEsLogin($provincias);
+            if ($this->input->post('login')) {//SI SE HA DADO A LOGIN
+                $this->SiEsLogin($provincias); 
             }
         }
-        if ($this->input->post('insc')) {
+        if ($this->input->post('insc')) { //SI SE HA DADO A INSCRIBIR
             $this->SiEsInscribir($provincias);
         }
     }
-
+/**
+ * DESTRUYE LA SESIÓN
+ */
     public function CerrarSesion() {
         $this->session->unset_userdata('login');
         $this->session->unset_userdata('user');
         $this->session->unset_userdata('comprando');
         $this->session->unset_userdata('carrito');
-        redirect('/Welcome/index', 'location', 301);
+        redirect('/Welcome/index', 'location', 301); //MUESTRA INICIO
     }
-
+/**
+ * 
+ * @param type $user
+ * @param type $pass
+ */
     public function LogeaUser($user, $pass) {
         $this->session->set_userdata(array('login'=>'logueado'));
         $id = $this->usuarios->DevuelveId($user, $pass);

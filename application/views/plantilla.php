@@ -48,7 +48,7 @@
                                     <ul class="dropdown-menu">
                                         <?php                                       
                                         echo "<li><a href=" . base_url() . 'index.php/Welcome/cambiarTarifa/EUR' . "> EUR</a></li>";
-                                       creaSelectMoneda();                                       
+                                       creaSelectMoneda(current_url());     
                                         ?>
                                     </ul>
                                 </div>

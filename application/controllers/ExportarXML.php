@@ -9,35 +9,39 @@ class ExportarXML extends CI_Controller {
         $this->load->helper('monedas');
     
     }
-
+/**
+ * EXPORTAR LAS CATEGORÍAS Y LOS PRODUCTOS A XML
+ */
     public function exportar() {
-        $categorias = $this->productos->Categorias();
-        $xml = new SimpleXMLElement('<categorias/>'); 
+        $categorias = $this->productos->Categorias(); //COGE LAS CATEGORÍAS
+        $xml = new SimpleXMLElement('<categorias/>');  //CREA NUEVO XML
 
-        foreach ($categorias as $categoria) {
-            $xml_cat = $xml->addChild('categoria'); 
-            foreach ($categoria as $key => $value) {
-                $xml_cat->addChild($key, utf8_encode($value)); 
+        foreach ($categorias as $categoria) { //POR CADA CATEGORÍA
+            $xml_cat = $xml->addChild('categoria');  //COGE EL HIJO(CATEGORÍA)
+            foreach ($categoria as $key => $value) { //POR CADA VALOR DE LA CATEGORÍA
+                $xml_cat->addChild($key, utf8_encode($value)); //AÑADE LOS HIJOS Y EL VALOR
             }
-            $this->XMLAddProductos($xml_cat, $categoria['idCat']); 
+            $this->XMLAddProductos($xml_cat, $categoria['idCat']);  //AÑADIR LOS PRODUCTOS AL XML
         }
 
         Header('Content-type: text/xml; charset=utf-8');
         Header('Content-type: octec/stream');
         Header('Content-disposition: filename="pro_car_mercaroche.xml"');
-        print($xml->asXML());
+        print($xml->asXML()); //DESCARGA XML
     }
-
+/**
+ * AÑADE LOS PRODUCTOS AL XML
+ * @param type $xml_cat
+ * @param type $idCat
+ */
     protected function XMLAddProductos($xml_cat, $idCat) {
-        $productos = $this->productos->ProductosDeCat($idCat);
+        $productos = $this->productos->ProductosDeCat($idCat); //COGE LOS PRODUCTOS DE UNA CATEGORÍA
+        $xml_productos = $xml_cat->addChild('productos'); //COGE LOS PRODUCTOS
 
-        $xml_productos = $xml_cat->addChild('productos'); 
-
-        foreach ($productos as $pro) {
-            $xml_pro = $xml_productos->addChild('producto'); 
-
-            foreach ($pro as $key => $valor) {
-                $xml_pro->addChild($key, utf8_encode($valor)); 
+        foreach ($productos as $pro) {//POR CADA PRODUCTO
+            $xml_pro = $xml_productos->addChild('producto'); //COGE EL HIJO (PRODUCTO)
+            foreach ($pro as $key => $valor) { //POR CADA VALOR DE UN PRODUCTO
+                $xml_pro->addChild($key, utf8_encode($valor)); //AÑADE LOS HIJOS Y EL VALOR
             }
         }
     }
