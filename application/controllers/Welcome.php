@@ -13,21 +13,15 @@ class Welcome extends CI_Controller {
         $this->load->helper('monedas');
         
     }
-    public function index() {  
-        if (!file_exists('database.php')){
-            redirect('/Setup/index', 'location', 301);
-        }else{
-        
+    public function index() {
         if (!isset($_SESSION['moneda'])) {
             $this->session->set_userdata(array('moneda'=>'EUR', 'tarifa'=>1));
         }    
-        
         $categorias = $this->Productos->Categorias();
         $productos = $this->Productos->ProductosDestacados();
         $cuerpo['d1'] = $this->load->view('category', array('cat' => $categorias), true);
         $cuerpo['d2'] = $this->load->view('index', array('pro' => $productos), true);
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
-        }
     }
 
     function devuelveTarifa($moneda) {
@@ -44,11 +38,11 @@ class Welcome extends CI_Controller {
         }
     } 
     
-    function cambiarTarifa($moneda, $url) {
+    function cambiarTarifa($moneda) {
         $tarifa = $this->devuelveTarifa($moneda);
         $this->session->set_userdata(array('moneda' => (string) $moneda, 'tarifa' => (string) $tarifa));
-       // $this->index();
-       header("Location:$url");
+       header("Location:".$_SESSION['pag_act']);
+       
     }
 
 }

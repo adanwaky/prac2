@@ -30,7 +30,7 @@ class Detalle extends CI_Controller {
                 if ($this->input->post('cant') < 0 || $this->input->post('cant') > $producto[0]['stock']) {
                     //SI LA CANTIDAD QUE SE PIDE ES NEGATIVA O MAYOR QUE EL STOCK
                     $producto[0]['pasado'] = 1; //PASO ESTE VALOR PARA MOSTRAR EN LA VISTA UN MENSAJE
-                    $this->mostrarDetalle($producto); //VUELVE A CARGAR LA VISTA               
+                    $this->mostrarDetalle($id,$producto); //VUELVE A CARGAR LA VISTA               
                 } else { //SI HAY STOCK
                     $this->guardar($id, $producto); //LO INTRODUCE EN EL CARRITO
                 }
@@ -49,7 +49,7 @@ class Detalle extends CI_Controller {
  * MUESTRA LA VISTA DETALLE DE UN PRODUCTO
  * @param type $producto PRODUCTO 
  */
-    public function mostrarDetalle( $producto) {
+    public function mostrarDetalle( $id, $producto) {
         $categorias = $this->productos->Categorias();
         $cuerpo['d1'] = $this->load->view('category', array('cat' => $categorias), true);
         $cuerpo['d2'] = $this->load->view('product-details', array('pro' => $producto), true);
