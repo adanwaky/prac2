@@ -1,8 +1,10 @@
 <?php
 
 class pdf extends FPDF {
-
-    function Header() {
+/**
+ * CREA LA CABECERA DEL PDF
+ */
+    function Header() { 
         // Logo
         $this->Image('./assets/images/home/logo.png', 10, 8, 83, 12);
         // Arial bold 15
@@ -24,7 +26,11 @@ class pdf extends FPDF {
         // Número de página
         $this->Cell(0, 10, 'Page ' . $this->PageNo() . '/{nb}', 0, 0, 'C');
     }
-
+/**
+ * CREA LA TABLA CON LAS VENTAS EN EL PDF
+ * @param type $header
+ * @param type $data
+ */
     function FancyTable($header, $data) {
         // Colores, ancho de línea y fuente en negrita
         $this->SetFillColor(255, 149, 20);
@@ -45,7 +51,7 @@ class pdf extends FPDF {
         // Datos
        $fill = false;
        
-        foreach ($data as $row) {
+        foreach ($data as $row) { //POR CADA PRODUCTO
             $this->Cell(3);
             $this->Cell($w[0], 6, utf8_decode($row['nombre']), 'LR', 0, 'L', $fill);
             $this->Cell($w[1], 6, utf8_decode($row['descripcion']), 'LR', 0, 'L', $fill);
@@ -62,7 +68,10 @@ class pdf extends FPDF {
         $this->Cell(array_sum($w), 0, '', 'T');
         $this->Ln(10);
     }
-    
+    /**
+     * ESCRIBE EL TOTAL DE LA FACTURA EN EL PDF
+     * @param type $euros
+     */
     function total($euros){
         $this->SetFont('Arial', 'B', 15);
         // Movernos a la derecha
