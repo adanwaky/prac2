@@ -212,7 +212,7 @@ class Login extends CI_Controller {
      * @return boolean
      */
     private function InscripcionOk($usuario, $mail, $pass, $dni, $nombre, $apellidos, $direccion, $cp, $provincia, & $mensaje) {
-        $resultado = $this->usuarios->ExisteNombre($usuario, $this->session->userdata('user'));
+        $resultado = $this->usuarios->ExisteNombre($usuario);
         //MIRA SI EXISTE EL NOMBRE DE USUARIO EN LA BASE DE DATOS
         if ($usuario == "" || $pass == "" ||
                 $nombre == "" || $apellidos == "" || $direccion == "" || $cp == "" || $provincia == "") {

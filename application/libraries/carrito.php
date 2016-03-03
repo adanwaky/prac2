@@ -6,7 +6,7 @@ class carrito {
     protected $carrito = array();
 
     public function __construct() {
-        $this->carrito = $_SESSION[carrito::CARRITO_ID];
+       
         if (session_status() == PHP_SESSION_NONE) { //SI LAS SESIONES NO ESTÁN HABILITADAS
             $CI = get_instance();
             $CI->load->library('session');
@@ -17,6 +17,7 @@ class carrito {
             $this->carrito["precio_total"] = 0;
             $this->carrito["articulos_total"] = 0;
         }
+         $this->carrito = $_SESSION[carrito::CARRITO_ID];
     }
 /**
  * INTRODUCE UN PRODUCTO EN LA SESIÓN CARRITO

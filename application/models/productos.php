@@ -63,7 +63,7 @@ class productos extends CI_Model {
      * @param type $id
      * @param type $data
      */
-    public function DisminuyeStock($id, $data){
+    public function CambiaStock($id, $data){
          $this->db->update('producto', $data, array('idPro' => $id));
     }
     /**

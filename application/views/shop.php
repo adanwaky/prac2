@@ -9,15 +9,17 @@
                             <div class="productinfo text-center">
                                 <?php echo anchor('detalle/index/' . $producto['idPro'], '  
                                 <img class="img-responsive"  src= "' . base_url() . 'assets/img/' . $producto['imagen'] . '"/>') ?>
-                                <h2><?= number_format($producto['precio'] * (float) $_SESSION['tarifa'], 2, '.', '' ). ' ' . $_SESSION['moneda'] ?></h2>
+                                <h2><?= number_format($producto['precio'] * (float) $_SESSION['tarifa'], 2, '.', '') . ' ' . $_SESSION['moneda'] ?></h2>
                                 <p><?= $producto['nombrePro'] ?></p>
                                 <?php if ($producto['stock'] > 0) { ?>
                                     <a href="<?= base_url() ?>index.php/Cart/guardar/<?= $producto['idPro'] ?>"
                                        class="btn btn-default add-to-cart">
                                         <i class="fa fa-shopping-cart"></i>Añadir al carrito</a>
-                                    <?php } else {
+                                    <?php
+                                    } else {
                                         echo 'No disponible';
-                                    } ?>
+                                    }
+                                    ?>
                             </div>
 
                         </div>
@@ -26,7 +28,5 @@
 <?php } ?>
         </div><!--features_items--><?= $paginacion ?>
     </div>
-
-</div>
 </div>
 </section>

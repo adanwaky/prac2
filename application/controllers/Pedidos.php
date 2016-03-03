@@ -47,7 +47,7 @@ class Pedidos extends CI_Controller {
             $this->ventas->crearVenta($data); //INSERTA LA VENTA EN LA BASE DE DATOS
             $stock = $this->productos->devuelveStock($producto['id']); //DEVUELVE EL STOCK
             $nuevoStock = $stock[0]['stock'] - $producto['unidades']; //LO RESTA
-            $this->productos->DisminuyeStock($producto['id'], array('stock' => $nuevoStock));
+            $this->productos->CambiaStock($producto['id'], array('stock' => $nuevoStock));
             //CAMBIA EL STOCK EN LA BASE DE DATOS
         }
         //ENVÍA AL CORREO EL PDF DEL PEDIDO
@@ -113,8 +113,13 @@ class Pedidos extends CI_Controller {
  * @param type $mensaje
  */
     public function MostrarPedidos($mensaje = "") {
+        if($mensaje=='no'){
+            $men="El pedido está siendo procesado y es imposible anularlo";
+        }else{
+            $men="";
+        }
         $pedido = $this->pedido->pedidosDe($this->session->userdata('user'));
-        $cuerpo['d1'] = $this->load->view('pedidos', array('pedido' => $pedido, 'mensaje' => $mensaje), true);
+        $cuerpo['d1'] = $this->load->view('pedidos', array('pedido' => $pedido, 'mensaje' => $men), true);
         $this->load->view('plantilla', array('cuerpo' => $cuerpo));
     }
 /**
@@ -146,9 +151,10 @@ class Pedidos extends CI_Controller {
     public function AnularPedido($idPedido) {
         $pedido = $this->pedido->pedidonum($idPedido);
         if ($pedido[0]['estado'] == 'Procesado') { //SI ESTÁ PROCESADO NO PUEDE CAMBIARLO
-            $msj = "El_pedido_esta_procesado_y_es_imposible_anularlo";
+            $msj = "no";
             redirect("/Pedidos/MostrarPedidos/$msj", 'location', 301);
         } else { //SI NO LO CAMBIA
+            $this->subirstock($idPedido);
             $data = array('idPed' => $idPedido, 'estado' => 'Anulado');
             $this->pedido->actualizarPedido($data);
             redirect('/Pedidos/MostrarPedidos/', 'location', 301);
@@ -209,6 +215,19 @@ class Pedidos extends CI_Controller {
         $this->pdf->total(number_format($pedido[0]['importe'] * (float) $_SESSION['tarifa'], 2, '.', '') . ' ' . $_SESSION['moneda']);
         $this->pdf->AliasNbPages();
         $this->pdf->Output('D', 'FACTURA.pdf', true);
+    }
+    /**
+     * Devuelve el stock que tenía un producto cuando ha sido anulado
+     * @param type $pedido
+     */
+    function subirstock($pedido){
+        $ventas=$this->pedido->ventas($pedido);
+        foreach ($ventas as $venta){
+            $stock=$this->productos->devuelveStock($venta['Producto_idPro']);
+            $nuevoStock=($stock[0]['stock'] + $venta['unidades']);
+            echo ($nuevoStock);
+           $this->productos->CambiaStock($venta['Producto_idPro'], array('stock' => $nuevoStock));
+        }
     }
 
 }

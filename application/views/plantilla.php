@@ -109,7 +109,7 @@
                 </div>
             </div><!--/header-bottom-->
         </header><!--/header-->
-
+        
         <?php
         foreach ($cuerpo as $cue) {
             echo $cue;

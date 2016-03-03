@@ -77,8 +77,8 @@ class usuarios extends CI_Model {
      * @param type $id
      * @return type
      */
-    public function ExisteNombre($user, $id){
-        $qr = $this->db->query("select idUsu from usuario where user='$user'and idUsu!=$id");        
+    public function ExisteNombre($user){
+        $qr = $this->db->query("select idUsu from usuario where user='$user'");        
         return $qr->result_array();
     }
     
