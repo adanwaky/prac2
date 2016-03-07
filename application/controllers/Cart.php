@@ -90,7 +90,7 @@ class Cart extends CI_Controller {
             } else {
                 $producto = $this->productos->DetallesDe($key);//COGE LOS DATOS DE PRODUCTOS
                 if ($value > $producto[0]['stock']) { //SI NO HAY SUFICIENTE STOCK
-                    $mensaje = 'No hay suficiente stock';
+                    $mensaje = 'Error';
                     redirect("/Cart/muestraCart/$mensaje", 'location', 301); //MUESTRA EL CARRITO Y EL MENSAJE
                 } else {//SI HAY SUFICIENTE STOCK
                     $this->guardarPro($key, $value);//LO VUELVE A INTRODUCIR EN EL CARRITO

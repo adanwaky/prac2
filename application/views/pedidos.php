@@ -8,7 +8,7 @@
                     <li class="active">Pedidos</li>
                 </ol>
             </div>
-            <?php if(isset($mensaje)) echo ($mensaje);?>
+            <?php if(isset($mensaje)) echo "<p style='color:red; font-weight: bold;'>".$mensaje.'</p>';?>
             <div class="table-responsive cart_info">
                 <table class="table table-condensed">
                     <thead>

@@ -150,7 +150,7 @@ class Pedidos extends CI_Controller {
  */
     public function AnularPedido($idPedido) {
         $pedido = $this->pedido->pedidonum($idPedido);
-        if ($pedido[0]['estado'] == 'Procesado') { //SI ESTÁ PROCESADO NO PUEDE CAMBIARLO
+        if ($pedido[0]['estado'] != 'Pendiente') { //SI ESTÁ PROCESADO NO PUEDE CAMBIARLO
             $msj = "no";
             redirect("/Pedidos/MostrarPedidos/$msj", 'location', 301);
         } else { //SI NO LO CAMBIA

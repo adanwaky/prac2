@@ -91,6 +91,7 @@ class Login extends CI_Controller {
      * CONTROLA SI SE ACTUALIZA, CAMBIA LA CONTRASEÑA O SE DA DE BAJA LOS DATOS DE UN USUARIO
      */
     public function datosUser() {
+
         $provincias = $this->provincias->arrayprovincias(); //BUSCA LAS PROVINCIAS
         $user = $this->usuarios->DevuelveDatosUs($this->session->userdata('user')); //COGE LOS DATOS DEL USUARIO
         if (!$this->input->post()) { //SI NO SE HA ENVIADO NADA CARGA LA VISTA DEL FORMULARIO DE USUARIO
@@ -98,7 +99,8 @@ class Login extends CI_Controller {
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
             if ($this->input->post('act')) { //SI SE DA A ACTUALIZAR
-                $this->SiEsActualizar($provincias); //ACTUALIZA EL USUARIO
+                $this->session->set_userdata(array('act_datos' => "act_datos"));
+                $this->SiEsActualizar($provincias, $user); //ACTUALIZA EL USUARIO
             }
             if ($this->input->post('cons')) { //SI SE DA A CAMBIAR CONTRASEÑA
                 $this->enviarCorreoPass($this->session->userdata('user')); //ENVÍA UN CORREO
@@ -131,6 +133,7 @@ class Login extends CI_Controller {
             'estado' => 'alta',
             'provincias_id' => $provincia);
         $this->usuarios->ActualizarUsuario($datos); //ACTUALIZA LOS DATOS
+        $this->session->unset_userdata('act_datos');
         redirect("/Login/datosUser", 'location', 301); //MUESTRA LOS DATOS DEL USUARIO
     }
 
@@ -139,7 +142,7 @@ class Login extends CI_Controller {
      * @param type $id
      */
     public function enviarCorreoPass($id) {
-        $us = $this->usuarios->DevuelveDatosUs($id); //CARGA LOS DATOS DEL USUARIO
+        $us = $this->usuarios->DevuelveDatosUs($id); //CARGA LOS DATOS DEL USUARIO        
         $token = $this->generaToken($id, $us[0]['dni'], $us[0]['user']); //GENERA UN TOKEN
         $subject = "cambio"; //ASUNTO
         //VA AL CONTROLADOR DE CORREO PARA ENVIARLO
@@ -165,13 +168,16 @@ class Login extends CI_Controller {
      */
     public function cambiarPass($id, $token) {
         if (!$this->input->post()) { //SI NO SE HA ENVIADO NADA MUESTRA EL FORMULARIO
+            if (!$this->session->userdata('moneda')) { //SI NO EXISTE LA SESIÓN MONEDA LA CREA
+                $this->session->set_userdata(array('moneda' => 'EUR', 'tarifa' => 1));
+            }
             $cuerpo['d1'] = $this->load->view('camb_cont', '', true);
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
             //GENERO EL TOKEN CON LOS DATOS DEL INPUT
             $tok = $this->generaToken($id, $this->input->post('dni'), $this->input->post('user'));
-            $datos = array('pass' => md5($this->input->post('pass')), 'user' => $this->input->post('user'));
             if ($tok == $token) { //SI COINCIDE CON EL TOKEN QUE SE LE HA PASADO
+                $datos = array('pass' => md5($this->input->post('pass')), 'user' => $this->input->post('user'));
                 $this->usuarios->ActualizarUsuario($datos); //ACTUALIZA LA CONTRASEÑA EL USUARIO
                 redirect(base_url() . '/index.php/Login/index', 'location', 301); //VA A LOGIN
             } else { //SI NO COINCIDE
@@ -187,13 +193,18 @@ class Login extends CI_Controller {
      * SI SE OLVIDA LA CONTRASEÑA
      */
     public function ResetPass() {
-        if (!$this->input->post()) {//SI NO SE HA ENVIADO NADA
+        if ($this->input->post('user')=="") {//SI NO SE HA ENVIADO NADA
             //MUESTRA PEDIR USUARIO
             $cuerpo['d1'] = $this->load->view('pideUser', '', true);
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         } else {
             $id = $this->usuarios->DevuelveId2($this->input->post('user')); //BUSCA LA ID DEL USUARIO
+           if(empty($id)){
+               $cuerpo['d1'] = $this->load->view('pideUser', array('mensaje'=>'Usuario incorrecto'), true);
+                $this->load->view('plantilla', array('cuerpo' => $cuerpo));
+           }else{
             $this->enviarCorreoPass($id[0]['idUsu']); //ENVIA EL CORREO 
+            }
         }
     }
 
@@ -212,7 +223,11 @@ class Login extends CI_Controller {
      * @return boolean
      */
     private function InscripcionOk($usuario, $mail, $pass, $dni, $nombre, $apellidos, $direccion, $cp, $provincia, & $mensaje) {
-        $resultado = $this->usuarios->ExisteNombre($usuario);
+        if ($this->session->userdata('act_datos')) {
+            $resultado = $this->usuarios->ExisteNombreAct($usuario, $this->session->userdata('user'));
+        } else {
+            $resultado = $this->usuarios->ExisteNombreIns($usuario);
+        }
         //MIRA SI EXISTE EL NOMBRE DE USUARIO EN LA BASE DE DATOS
         if ($usuario == "" || $pass == "" ||
                 $nombre == "" || $apellidos == "" || $direccion == "" || $cp == "" || $provincia == "") {
@@ -238,7 +253,8 @@ class Login extends CI_Controller {
      * @return boolean
      */
     private function dnivalido($dni) {
-        $letra = substr($dni, -1);
+        $letra = strtoupper(substr($dni, -1));
+
         $numeros = substr($dni, 0, -1);
         if (substr("TRWAGMYFPDXBNJZSQVHLCKE", $numeros % 23, 1) == $letra && strlen($letra) == 1 && strlen($numeros) == 8) {
             return true;
@@ -273,10 +289,11 @@ class Login extends CI_Controller {
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         }
     }
-/**
- * SI SE LE HA DADO A LOGIN
- * @param type $provincias
- */
+
+    /**
+     * SI SE LE HA DADO A LOGIN
+     * @param type $provincias
+     */
     private function SiEsLogin($provincias) {
 
         if ($this->usuarios->existeUser($this->input->post('user'), md5($this->input->post('pass')))) {
@@ -288,11 +305,12 @@ class Login extends CI_Controller {
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         }
     }
-/**
- * SI SE LE HA DADO A ACTUALIZAR
- * @param type $provincias
- */
-    private function SiEsActualizar($provincias) {
+
+    /**
+     * SI SE LE HA DADO A ACTUALIZAR
+     * @param type $provincias
+     */
+    private function SiEsActualizar($provincias, $user) {
         $msj = "";
         if ($this->InscripcionOk($this->input->post('us'), $this->input->post('mail'), 'aa', $this->input->post('DNI'), $this->input->post('nombre'), $this->input->post('apellidos'), $this->input->post('dir'), $this->input->post('cp'), $this->input->post('provincias_id'), $msj)) {
             //SI LOS DATOS SON CORRECTOS, ACTUALIZA LOS DATOS EN LA BASE DE DATOS 

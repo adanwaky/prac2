@@ -1,5 +1,5 @@
 <?php if ($carro == null) { ?>
-<center><div> No hay productos en el carrito</div></center>
+<center><div><p style='color:blue;font-weight: bold;'> No hay productos en el carrito</p></div></center>
                         <?php
                     } else {?>
 <form method="post">
@@ -27,7 +27,7 @@
 
                         <?php
                         if ($mensaje != null) {
-                            echo $mensaje;
+                            echo "<p style='color:red; font-weight: bold;'> No hay suficiente stock</p>";
                         }
                         foreach ($carro as $pro) {
                             ?>
@@ -44,7 +44,7 @@
                                 </td>
                                 <td class="cart_quantity">
                                     <div class="cart_quantity_button">
-                                        <input type="number" name="<?= $pro['id'] ?>" value="<?= $pro['unidades'] ?>" min="1">
+                                        <input type="number" name="<?=$pro['id']?>" value="<?=$pro['unidades']?>" min="1">
                                     </div>
                                 </td>
                                 <td class="cart_total">

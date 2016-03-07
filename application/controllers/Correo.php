@@ -54,7 +54,7 @@ class Correo extends CI_Controller {
         $this->email->message($mensaje);
 
         if ($this->email->send()) { //SI EL CORREO SE HA ENVIADO MOSTRAR EL MENSAJE EN LA PLANTILLA
-            $cuerpo['d1'] = '<center><P>Se ha enviado un enlace a su correo electrónico<p></center>';
+            $cuerpo['d1'] = '<center><P style="color:blue; font-weight:bold;">Se ha enviado un enlace a su correo electrónico<p></center>';
             $this->load->view('plantilla', array('cuerpo' => $cuerpo));
         }
         echo $this->email->print_debugger(); 

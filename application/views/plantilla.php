@@ -56,21 +56,21 @@
 
 
                             </div>
-                            <div class="shop-menu pull-right">
+                            <div class="mainmenu pull-right">
                                 <ul class="nav navbar-nav collapse navbar-collapse">
                                     <?php if (isset($_SESSION['user'])) { ?>
                                         <li>Hola, <?php echo $_SESSION['nombreUser'] ?>!</li>
                                         <li class="dropdown">
-                                            <a href="#"><i class="fa fa-user"></i> Cuenta<i class="fa fa-angle-down"></i></a>
+                                            <a href="#"><i class="fa fa-user"></i>  Cuenta<i class="fa fa-angle-down"></i></a>
                                             <ul role="menu" class="sub-menu">
                                                 <li><?php echo anchor("Login/datosUser", "Datos") ?></li>
                                                 <li><?php echo anchor('Pedidos/MostrarPedidos', 'Pedidos') ?></li>
                                                 <li><?php echo anchor('Login/CerrarSesion', 'Cerrar Sesión') ?></li>
                                             </ul></li><?php } else { ?>
-                                        <li><?php echo anchor('Login/index', '<i class="fa fa-lock"></i>Login') ?></li>
+                                        <li><?php echo anchor('Login/index', '<i class="fa fa-lock"></i>  Login') ?></li>
                                     <?php }
                                     ?>
-                                    <li><?php echo anchor('Cart/muestraCart', '<i class="fa fa-shopping-cart"></i>Carrito') ?></li>
+                                    <li><?php echo anchor('Cart/muestraCart', '<i class="fa fa-shopping-cart"></i>  Carrito') ?></li>
 
                                 </ul>
                             </div>
@@ -94,7 +94,8 @@
                             <div class="mainmenu pull-left">
                                 <ul class="nav navbar-nav collapse navbar-collapse">
                                     <li><a href="<?= base_url() ?>" class="active">Home</a></li>
-                                    <li class="dropdown"><a href="#">Tienda<i class="fa fa-angle-down"></i></a>
+                                    <li class="dropdown">
+                                        <a href="#">Tienda<i class="fa fa-angle-down"></i></a>
                                         <ul role="menu" class="sub-menu">
                                             <li><?php echo anchor('Cart/muestraCart', 'Carrito') ?></li>
                                             <li><?php echo anchor('Categoria/mostrarTodo', 'Productos') ?></li>

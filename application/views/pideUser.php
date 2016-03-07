@@ -1,7 +1,9 @@
 <html>
     <body> 
         <div class="container">
-           
+            <?php  if (isset($mensaje)){
+        echo "<p style='color:red; font-weight: bold;'>".$mensaje.'</p>';}
+        ?>
             <div class="row" >
                 <div class="col-sm-4">
                     <div class="signup-form" >
